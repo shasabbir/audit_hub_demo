@@ -1,8 +1,10 @@
 {
   "name": "lqtm-audit-hub",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
   "scripts": {
+    "build:pages": "node scripts/build-pages.mjs",
     "start:local": "node server.mjs",
     "dev": "vinext dev",
     "build": "vinext build",

@@ -1,9 +1,9 @@
 .next/
 node_modules/
+.tools/
 out/
 *.log
 _extract_tmp/
 analysis_extract.json
 *.xlsx
 *.docx
-
