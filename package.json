@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vinext dev",
     "build": "vinext build",
+    "postbuild": "node scripts/copy-hosting.mjs",
     "preview": "vinext preview"
   },
   "dependencies": {
