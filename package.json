@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "start:local": "node server.mjs",
     "dev": "vinext dev",
     "build": "vinext build",
     "postbuild": "node scripts/copy-hosting.mjs",
