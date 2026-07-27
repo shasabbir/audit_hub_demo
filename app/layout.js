@@ -1,7 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "LABORATORY QUALITY THINKING MODEL (LQTM)",
+  title: "Quality Management System",
   description: "Laboratory quality audit, analysis and CAPA workspace",
 };
 

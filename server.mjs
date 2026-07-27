@@ -25,6 +25,6 @@ const server = http.createServer(async (request, response) => {
 
 server.listen(port, "127.0.0.1", () => {
   console.log(
-    `LABORATORY QUALITY THINKING MODEL (LQTM): http://127.0.0.1:${port}`,
+    `Quality Management System: http://127.0.0.1:${port}`,
   );
 });
