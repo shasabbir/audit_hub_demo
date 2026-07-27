@@ -705,21 +705,46 @@ td:first-child small {
 .smart-card h2 {
   font-size: 18px;
   line-height: 1.5;
-  margin: 7px 0 18px;
+  margin: 7px 0 14px;
 }
-.smart-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-}
-.smart-tags span {
-  background: #fff;
+.smart-table-wrap {
+  overflow-x: auto;
   border: 1px solid #bfdbce;
+  border-radius: 12px;
+  background: #fff;
+}
+.smart-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.smart-table th,
+.smart-table td {
+  padding: 13px 15px;
+  border-bottom: 1px solid #dcebe4;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.5;
+}
+.smart-table thead th {
+  background: #f3faf6;
   color: var(--green);
   font-size: 10px;
   font-weight: 800;
-  padding: 6px 9px;
-  border-radius: 99px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.smart-table tbody th {
+  width: 145px;
+  color: var(--green);
+  font-size: 12px;
+}
+.smart-table tbody td {
+  color: var(--ink);
+  font-size: 13px;
+}
+.smart-table tbody tr:last-child th,
+.smart-table tbody tr:last-child td {
+  border-bottom: 0;
 }
 .capa-sidebar {
   display: grid;

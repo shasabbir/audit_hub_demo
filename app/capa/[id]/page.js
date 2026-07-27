@@ -19,6 +19,22 @@ export default async function CapaPage({ params }) {
     title: "Create corrective action plan",
     finding: `The audit response to “${q.question}” is No and requires documented investigation.`,
   };
+  const smartRows = [
+    { criterion: "Specific", detail: c.correctiveAction },
+    { criterion: "Measurable", detail: c.objective },
+    {
+      criterion: "Achievable",
+      detail: `${c.owner} owns the action, with progress monitored by ${c.monitor}.`,
+    },
+    {
+      criterion: "Relevant",
+      detail: `Directly addresses the identified nonconformity: ${c.finding}`,
+    },
+    {
+      criterion: "Time-bound",
+      detail: `Complete the objective and retain approval evidence by ${c.due}.`,
+    },
+  ];
   return (
     <Shell
       eyebrow={`Finding NC-${String(q.id).padStart(3, "0")}`}
@@ -96,17 +112,24 @@ export default async function CapaPage({ params }) {
           </article>
           <article className="smart-card">
             <span className="eyebrow">SMART objective</span>
-            <h2>{c.objective}</h2>
-            <div className="smart-tags">
-              {[
-                "Specific",
-                "Measurable",
-                "Achievable",
-                "Relevant",
-                "Time-bound",
-              ].map((x) => (
-                <span key={x}>{x}</span>
-              ))}
+            <h2>Objective breakdown</h2>
+            <div className="smart-table-wrap">
+              <table className="smart-table">
+                <thead>
+                  <tr>
+                    <th>SMART criterion</th>
+                    <th>Objective detail</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {smartRows.map((row) => (
+                    <tr key={row.criterion}>
+                      <th scope="row">{row.criterion}</th>
+                      <td>{row.detail}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </article>
         </div>
