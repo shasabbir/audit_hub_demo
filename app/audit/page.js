@@ -68,7 +68,7 @@ export default function AuditPage() {
 
   return (
     <Shell
-      eyebrow="ISO 9001:2015"
+      eyebrow="ISO 9001:2015 Standard"
       title="Laboratory quality audit"
       subtitle="Assess each requirement, attach evidence, and open a CAPA when a response is nonconforming."
       actions={
