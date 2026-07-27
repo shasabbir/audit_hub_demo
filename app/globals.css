@@ -1860,3 +1860,482 @@ td:first-child small {
     margin-top: 9px;
   }
 }
+
+/* Mobile layout refinement. These rules intentionally stay below the
+   desktop breakpoint so the existing desktop presentation is unchanged. */
+@media (max-width: 760px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  body {
+    -webkit-text-size-adjust: 100%;
+  }
+  .site-shell {
+    width: 100%;
+  }
+  .sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    min-height: 60px;
+    padding: 9px 12px;
+    gap: 8px;
+    border-bottom: 1px solid #29483f;
+    box-shadow: 0 8px 24px rgb(6 31 24 / 18%);
+  }
+  .brand {
+    min-width: 0;
+    gap: 8px;
+  }
+  .brand-mark {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    border-radius: 11px;
+  }
+  .brand strong {
+    max-width: 110px;
+    font-size: 10px;
+    line-height: 1.25;
+  }
+  .sidebar nav {
+    flex: 0 0 auto;
+    gap: 3px;
+  }
+  .nav-item {
+    min-height: 40px;
+    margin: 0;
+    padding: 8px 9px;
+    gap: 5px;
+    font-size: 11px;
+  }
+  .nav-item svg {
+    flex: 0 0 auto;
+  }
+  main {
+    min-width: 0;
+    padding: 20px 12px 44px;
+  }
+  .page-header {
+    gap: 14px;
+    margin-bottom: 19px;
+  }
+  .page-header h1 {
+    max-width: 100%;
+    font-size: clamp(24px, 7vw, 29px);
+    line-height: 1.12;
+    overflow-wrap: anywhere;
+  }
+  .page-header p {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .header-actions {
+    gap: 8px;
+  }
+  .header-actions .button {
+    min-height: 44px;
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+  .summary-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    padding: 10px;
+    border-radius: 14px;
+  }
+  .summary-strip > div {
+    min-width: 0;
+    padding: 9px;
+  }
+  .summary-strip strong {
+    font-size: 20px;
+  }
+  .progress-cell {
+    padding-right: 9px;
+  }
+  .toolbar {
+    gap: 10px;
+    margin: 15px 0 19px;
+  }
+  .search {
+    min-height: 44px;
+  }
+  .segmented {
+    width: 100%;
+  }
+  .segmented button {
+    flex: 1;
+    min-height: 40px;
+    padding-inline: 7px;
+  }
+  .clause-list {
+    gap: 18px;
+  }
+  .major-clause,
+  .clause-summary {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 15px;
+  }
+  .major-clause h2,
+  .clause-summary h2 {
+    font-size: 17px;
+    line-height: 1.35;
+  }
+  .major-clause-score,
+  .clause-score {
+    width: 100%;
+    min-width: 0;
+    text-align: left;
+  }
+  .major-clause-score strong,
+  .clause-score strong {
+    font-size: 22px;
+  }
+  .question-card {
+    grid-template-columns: 1fr;
+    border-radius: 13px;
+  }
+  .question-number {
+    width: max-content;
+    margin: 13px 14px 0;
+    padding: 4px 8px;
+    border: 0;
+    border-radius: 7px;
+    background: #f0f4f1;
+    color: #687871;
+  }
+  .question-body {
+    min-width: 0;
+    padding: 11px 14px 15px;
+  }
+  .question-meta {
+    flex-wrap: wrap;
+  }
+  .question-body h2 {
+    margin: 7px 0 14px;
+    font-size: 15px;
+  }
+  .answer-row {
+    width: 100%;
+    gap: 9px;
+  }
+  .answer-options {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+    gap: 6px;
+  }
+  .answer-options button {
+    min-height: 42px;
+    justify-content: center;
+    padding: 8px 7px;
+  }
+  .capa-link {
+    width: 100%;
+    min-height: 42px;
+    justify-content: center;
+  }
+  .evidence {
+    align-items: center;
+    gap: 8px;
+    line-height: 1.4;
+  }
+  .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .metric-card {
+    min-width: 0;
+    min-height: 126px;
+    padding: 15px;
+  }
+  .metric-card strong {
+    margin: 7px 0 5px;
+    font-size: 27px;
+  }
+  .metric-card small {
+    display: block;
+    padding-right: 4px;
+    font-size: 10px;
+    line-height: 1.35;
+  }
+  .metric-card svg {
+    right: 13px;
+    top: 13px;
+    width: 19px;
+    height: 19px;
+  }
+  .dashboard-grid,
+  .time-chart-grid {
+    gap: 10px;
+    margin: 10px 0;
+  }
+  .panel,
+  .detail-card,
+  .smart-card,
+  .side-card,
+  .fishbone-card {
+    min-width: 0;
+    padding: 16px;
+    border-radius: 13px;
+  }
+  .panel-heading,
+  .chart-title,
+  .fishbone-heading {
+    gap: 10px;
+  }
+  .chart-title {
+    flex-wrap: wrap;
+  }
+  .chart-title > div {
+    flex: 1 1 220px;
+    min-width: 0;
+  }
+  .dummy-pill,
+  .pulse-label {
+    flex: 0 0 auto;
+  }
+  .column-chart {
+    width: 100%;
+    height: 225px;
+    margin-top: 17px;
+    padding-inline: 2px;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+  }
+  .donut-wrap {
+    justify-content: space-around;
+    gap: 14px;
+    padding: 22px 0 5px;
+  }
+  .donut {
+    width: 136px;
+    height: 136px;
+  }
+  .donut::before {
+    width: 92px;
+    height: 92px;
+  }
+  .legend {
+    min-width: 105px;
+  }
+  .legend div {
+    margin: 11px 0;
+  }
+  .clause-bars {
+    gap: 17px;
+    margin-top: 21px;
+  }
+  .clause-bars > div > div:first-child {
+    gap: 12px;
+  }
+  .clause-bars span {
+    line-height: 1.35;
+  }
+  .findings-panel {
+    padding: 0;
+    overflow: hidden;
+  }
+  .findings-panel .panel-heading {
+    flex-direction: column;
+    padding: 16px;
+  }
+  table:not(.smart-table),
+  table:not(.smart-table) tbody,
+  table:not(.smart-table) tr,
+  table:not(.smart-table) td {
+    display: block;
+    width: 100%;
+  }
+  table:not(.smart-table) thead {
+    display: none;
+  }
+  table:not(.smart-table) tbody {
+    display: grid;
+    gap: 10px;
+    padding: 0 12px 12px;
+  }
+  table:not(.smart-table) tr {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    background: #fff;
+  }
+  table:not(.smart-table) td {
+    display: grid;
+    grid-template-columns: 82px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    padding: 10px 12px;
+    border-top: 1px solid var(--line);
+  }
+  table:not(.smart-table) td::before {
+    color: var(--muted);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  table:not(.smart-table) td:first-child {
+    display: block;
+    border-top: 0;
+    background: #f8faf8;
+  }
+  table:not(.smart-table) td:first-child::before {
+    display: none;
+  }
+  table:not(.smart-table) td:nth-child(2)::before {
+    content: "Priority";
+  }
+  table:not(.smart-table) td:nth-child(3)::before {
+    content: "Owner";
+  }
+  table:not(.smart-table) td:nth-child(4)::before {
+    content: "Due date";
+  }
+  table:not(.smart-table) td:nth-child(5)::before {
+    content: "Progress";
+  }
+  table:not(.smart-table) td:nth-child(6)::before {
+    content: "Status";
+  }
+  .capa-hero {
+    padding: 16px;
+    border-radius: 13px;
+  }
+  .capa-hero blockquote {
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .capa-hero blockquote p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .capa-layout,
+  .capa-main,
+  .capa-sidebar {
+    gap: 10px;
+  }
+  .detail-card {
+    grid-template-columns: 35px minmax(0, 1fr);
+    gap: 11px;
+  }
+  .section-icon {
+    width: 35px;
+    height: 35px;
+  }
+  .smart-card h2 {
+    font-size: 17px;
+  }
+  .smart-table-wrap {
+    overflow: visible;
+    border: 0;
+    background: transparent;
+  }
+  .smart-table,
+  .smart-table tbody,
+  .smart-table tr,
+  .smart-table th,
+  .smart-table td {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+  .smart-table thead {
+    display: none;
+  }
+  .smart-table tbody tr {
+    overflow: hidden;
+    border: 1px solid #bfdbce;
+    border-radius: 11px;
+    background: #fff;
+  }
+  .smart-table tbody th,
+  .smart-table tbody td {
+    display: grid;
+    grid-template-columns: 105px minmax(0, 1fr);
+    gap: 9px;
+    padding: 11px 12px;
+    border-bottom: 1px solid #dcebe4;
+    overflow-wrap: anywhere;
+  }
+  .smart-table tbody th::before,
+  .smart-table tbody td::before {
+    color: var(--green);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .smart-table tbody th::before {
+    content: "S/N";
+  }
+  .smart-table tbody td:nth-child(2)::before {
+    content: "Objectives";
+  }
+  .smart-table tbody td:nth-child(3)::before {
+    content: "Target";
+  }
+  .smart-table tbody td:nth-child(4)::before {
+    content: "Timeline";
+  }
+  .smart-table tbody td:nth-child(5)::before {
+    content: "Action plan";
+  }
+  .smart-table tbody td:nth-child(6)::before {
+    content: "Responsible";
+  }
+  .smart-table tbody td:nth-child(7)::before {
+    content: "Monitoring";
+  }
+  .smart-table tbody td:nth-child(8)::before {
+    content: "Status";
+  }
+  .fishbone-v2 .fishbone-heading {
+    flex-wrap: wrap;
+  }
+  .fishbone-v2 .fishbone-heading h2 {
+    font-size: 18px;
+  }
+  .fishbone-v2 .cause-detail {
+    grid-template-columns: 38px minmax(0, 1fr);
+    padding: 12px;
+  }
+  .fishbone-v2 .cause-badge {
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+  }
+  .fish-caption {
+    line-height: 1.45;
+  }
+}
+
+@media (max-width: 520px) {
+  .fishbone-stage {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 410px) {
+  .brand > span:last-child {
+    display: none !important;
+  }
+  .page-header h1 {
+    font-size: 24px;
+  }
+  .donut {
+    width: 126px;
+    height: 126px;
+  }
+  .donut::before {
+    width: 86px;
+    height: 86px;
+  }
+}
