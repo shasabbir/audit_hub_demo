@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   AlertTriangle,
@@ -11,11 +14,63 @@ import { Shell, StatusPill } from "../components";
 import { capas, questions } from "../data";
 
 export default function Dashboard() {
-  const yes = questions.filter((q) => q.answer === "yes").length;
-  const no = questions.filter((q) => q.answer === "no").length;
-  const na = questions.filter((q) => q.answer === "na").length;
-  const rate = Math.round((yes / (yes + no)) * 100);
-  const findings = Object.entries(capas);
+  const [auditQuestions, setAuditQuestions] = useState(questions);
+  useEffect(() => {
+    const loadAnswers = () => {
+      try {
+        const saved = JSON.parse(
+          localStorage.getItem("lqtm-audit-answers") || "{}",
+        );
+        setAuditQuestions((items) =>
+          items.map((question) => ({
+            ...question,
+            answer: saved[question.id] || question.answer,
+          })),
+        );
+      } catch {
+        // Keep the bundled dummy answers if local storage is unavailable.
+      }
+    };
+    loadAnswers();
+    window.addEventListener("storage", loadAnswers);
+    return () => window.removeEventListener("storage", loadAnswers);
+  }, []);
+  const yes = auditQuestions.filter((q) => q.answer === "yes").length;
+  const no = auditQuestions.filter((q) => q.answer === "no").length;
+  const na = auditQuestions.filter((q) => q.answer === "na").length;
+  const applicable = yes + no;
+  const rate = applicable ? Math.round((yes / applicable) * 100) : 0;
+  const findings = auditQuestions
+    .filter((question) => question.answer === "no")
+    .map((question) => [
+      String(question.id),
+      capas[question.id] || {
+        ...capas[2],
+        title: `Corrective action for question ${question.id}`,
+      },
+    ]);
+  const clauseScores = [
+    ...new Set(auditQuestions.map((question) => question.clause)),
+  ].map((clause) => {
+    const items = auditQuestions.filter(
+      (question) => question.clause === clause,
+    );
+    const clauseYes = items.filter(
+      (question) => question.answer === "yes",
+    ).length;
+    const clauseNo = items.filter(
+      (question) => question.answer === "no",
+    ).length;
+    const clauseApplicable = clauseYes + clauseNo;
+    const clauseRate = clauseApplicable
+      ? Math.round((clauseYes / clauseApplicable) * 100)
+      : 0;
+    return {
+      label: `${clause} ${items[0].section}`,
+      rate: clauseRate,
+      tone: clauseRate >= 80 ? "good" : clauseRate >= 50 ? "warn" : "critical",
+    };
+  });
   const monthly = [
     ["Jan", 5],
     ["Feb", 7],
@@ -52,13 +107,15 @@ export default function Dashboard() {
         <div className="metric-card accent">
           <span>Conformance rate</span>
           <strong>{rate}%</strong>
-          <small>5 of 8 applicable controls</small>
+          <small>
+            {yes} of {applicable} applicable controls
+          </small>
           <Target size={24} />
         </div>
         <div className="metric-card">
           <span>Open findings</span>
           <strong>{no}</strong>
-          <small>2 high · 1 medium</small>
+          <small>{no} nonconforming audit responses</small>
           <AlertTriangle size={24} />
         </div>
         <div className="metric-card">
@@ -146,14 +203,14 @@ export default function Dashboard() {
               <span className="eyebrow">Assessment</span>
               <h2>Response distribution</h2>
             </div>
-            <span className="muted">9 questions</span>
+            <span className="muted">{auditQuestions.length} questions</span>
           </div>
           <div className="donut-wrap">
             <div
               className="donut"
               style={{
-                "--yes": `${(yes / 9) * 360}deg`,
-                "--no": `${((yes + no) / 9) * 360}deg`,
+                "--yes": `${(yes / auditQuestions.length) * 360}deg`,
+                "--no": `${((yes + no) / auditQuestions.length) * 360}deg`,
               }}
             >
               <div>
@@ -188,22 +245,16 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="clause-bars">
-            {[
-              ["4.1 Context", 33, "critical"],
-              ["4.2 Interested parties", 50, "warn"],
-              ["4.3 Scope", 100, "good"],
-              ["5 Leadership", 100, "good"],
-              ["6 Planning", 0, "neutral"],
-            ].map(([label, val, tone]) => (
+            {clauseScores.map(({ label, rate: clauseRate, tone }) => (
               <div key={label}>
                 <div>
                   <span>{label}</span>
-                  <strong>{val}%</strong>
+                  <strong>{clauseRate}%</strong>
                 </div>
                 <div className="bar">
                   <i
                     className={tone}
-                    style={{ width: `${Math.max(val, 3)}%` }}
+                    style={{ width: `${Math.max(clauseRate, 3)}%` }}
                   />
                 </div>
               </div>
@@ -241,7 +292,10 @@ export default function Dashboard() {
                         <strong>{c.title}</strong>
                         <small>
                           Question {id} · Clause{" "}
-                          {questions.find((q) => q.id === Number(id))?.clause}
+                          {
+                            auditQuestions.find((q) => q.id === Number(id))
+                              ?.clause
+                          }
                         </small>
                       </span>
                     </Link>

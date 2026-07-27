@@ -81,8 +81,222 @@ const script = `(()=>{const defaults=${JSON.stringify(
     answer,
   })),
 )};const key="lqtm-audit-answers";let saved={};try{saved=JSON.parse(localStorage.getItem(key)||"{}")}catch{}const answers=Object.fromEntries(defaults.map(q=>[q.id,saved[q.id]||q.answer]));const base=location.hostname.endsWith("github.io")?"/"+location.pathname.split("/").filter(Boolean)[0]:"";const findingUrl=id=>base+"/capa/"+id+"/";function save(){localStorage.setItem(key,JSON.stringify(answers))}function paint(card,answer){card.classList.remove("yes","no","na");card.classList.add(answer);card.querySelectorAll("[data-a]").forEach(button=>button.classList.toggle("active",button.dataset.a===answer));const slot=card.querySelector("[data-finding-slot]");if(slot)slot.innerHTML=answer==="no"?'<a class="open" href="'+findingUrl(card.dataset.qid)+'">Open finding →</a>':""}function updateSummary(){const values=Object.values(answers),answered=values.filter(Boolean).length,yes=values.filter(v=>v==="yes").length,no=values.filter(v=>v==="no").length,applicable=yes+no;const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};set("answered-count",answered+"/"+defaults.length);set("conformance-count",(applicable?Math.round(yes/applicable*100):0)+"%");set("progress-count",Math.round(answered/defaults.length*100)+"%");set("dashboard-conformance",(applicable?Math.round(yes/applicable*100):0)+"%");set("dashboard-open",no)}document.querySelectorAll("[data-qid]").forEach(card=>paint(card,answers[card.dataset.qid]||""));document.addEventListener("click",event=>{const answerButton=event.target.closest("[data-a]");if(answerButton){const card=answerButton.closest("[data-qid]");answers[card.dataset.qid]=answerButton.dataset.a;paint(card,answerButton.dataset.a);save();updateSummary()}const cause=event.target.closest(".cause");if(cause){document.querySelectorAll(".cause").forEach(item=>item.classList.remove("active"));cause.classList.add("active");const detail=document.querySelector(".detail");detail.className="detail "+cause.dataset.tone;detail.innerHTML="<b>"+cause.dataset.name+"</b><p>"+cause.dataset.ev+"</p>"}});const tbody=document.getElementById("findings-body");if(tbody){const rows=defaults.filter(q=>answers[q.id]==="no").map(q=>'<tr><td><a class="redlink" href="'+findingUrl(q.id)+'">Question '+q.id+' · Clause '+q.clause+'</a><small style="display:block;color:#6d7b75;margin-top:4px">'+q.question+'</small></td><td><span class="pill">High</span></td><td>Quality Manager</td><td>Dec 2026</td><td>Open</td></tr>').join("");tbody.innerHTML=rows||'<tr><td colspan="5" style="text-align:center;color:#6d7b75">No open findings</td></tr>'}updateSummary()})();`;
+function clientStateController(defaults) {
+  const storageKey = "lqtm-audit-answers";
+  const validAnswers = new Set(["yes", "no", "na"]);
+  const savedAnswers = readSavedAnswers();
+  const answers = Object.fromEntries(
+    defaults.map((question) => [
+      String(question.id),
+      validAnswers.has(savedAnswers[question.id])
+        ? savedAnswers[question.id]
+        : question.answer,
+    ]),
+  );
+  const pathParts = location.pathname.split("/").filter(Boolean);
+  const basePath = location.hostname.endsWith("github.io")
+    ? `/${pathParts[0]}`
+    : "";
+  let activeFilter = "all";
+  let searchQuery = "";
+
+  function readSavedAnswers() {
+    try {
+      return JSON.parse(localStorage.getItem(storageKey) || "{}");
+    } catch {
+      return {};
+    }
+  }
+
+  function saveAnswers() {
+    localStorage.setItem(storageKey, JSON.stringify(answers));
+  }
+
+  function findingUrl(id) {
+    return `${basePath}/capa/${id}/`;
+  }
+
+  function setText(id, value) {
+    const element = document.getElementById(id);
+    if (element) element.textContent = value;
+  }
+
+  function score(values) {
+    const yes = values.filter((value) => value === "yes").length;
+    const no = values.filter((value) => value === "no").length;
+    const na = values.filter((value) => value === "na").length;
+    const applicable = yes + no;
+    return {
+      yes,
+      no,
+      na,
+      applicable,
+      rate: applicable ? Math.round((yes / applicable) * 100) : 0,
+    };
+  }
+
+  function renderQuestion(card) {
+    const answer = answers[card.dataset.qid];
+    card.classList.remove("yes", "no", "na");
+    if (validAnswers.has(answer)) card.classList.add(answer);
+    card.querySelectorAll("[data-a]").forEach((button) => {
+      button.classList.toggle("active", button.dataset.a === answer);
+      button.setAttribute(
+        "aria-pressed",
+        button.dataset.a === answer ? "true" : "false",
+      );
+    });
+    const findingSlot = card.querySelector("[data-finding-slot]");
+    if (findingSlot) {
+      findingSlot.innerHTML =
+        answer === "no"
+          ? `<a class="open" href="${findingUrl(card.dataset.qid)}">Open finding &rarr;</a>`
+          : "";
+    }
+  }
+
+  function renderClause(group) {
+    const cards = [...group.querySelectorAll("[data-qid]")];
+    const result = score(cards.map((card) => answers[card.dataset.qid]));
+    const rate = group.querySelector("[data-clause-rate]");
+    const detail = group.querySelector("[data-clause-detail]");
+    const bar = group.querySelector("[data-clause-bar]");
+    if (rate) rate.textContent = `${result.rate}%`;
+    if (detail) {
+      detail.textContent = `${result.yes} Yes · ${result.no} No · ${result.na} N/A · ${result.applicable} applicable`;
+    }
+    if (bar) bar.style.width = `${result.rate}%`;
+  }
+
+  function renderAudit() {
+    document.querySelectorAll("[data-qid]").forEach(renderQuestion);
+    document.querySelectorAll("[data-clause-group]").forEach(renderClause);
+    const values = defaults.map((question) => answers[question.id]);
+    const result = score(values);
+    const answered = values.filter((value) => validAnswers.has(value)).length;
+    setText("answered-count", `${answered}/${defaults.length}`);
+    setText("conformance-count", `${result.rate}%`);
+    setText(
+      "progress-count",
+      `${Math.round((answered / defaults.length) * 100)}%`,
+    );
+    applyAuditFilters();
+  }
+
+  function renderDashboard() {
+    const result = score(defaults.map((question) => answers[question.id]));
+    setText("dashboard-conformance", `${result.rate}%`);
+    setText("dashboard-open", result.no);
+    const tableBody = document.getElementById("findings-body");
+    if (!tableBody) return;
+    const rows = defaults
+      .filter((question) => answers[question.id] === "no")
+      .map(
+        (question) =>
+          `<tr><td><a class="redlink" href="${findingUrl(question.id)}">Question ${question.id} · Clause ${question.clause}</a><small style="display:block;color:#6d7b75;margin-top:4px">${question.question}</small></td><td><span class="pill">High</span></td><td>Quality Manager</td><td>Dec 2026</td><td>Open</td></tr>`,
+      )
+      .join("");
+    tableBody.innerHTML =
+      rows ||
+      '<tr><td colspan="5" style="text-align:center;color:#6d7b75">No open findings</td></tr>';
+  }
+
+  function applyAuditFilters() {
+    document.querySelectorAll("[data-clause-group]").forEach((group) => {
+      let visibleCards = 0;
+      group.querySelectorAll("[data-qid]").forEach((card) => {
+        const answerMatches =
+          activeFilter === "all" || answers[card.dataset.qid] === activeFilter;
+        const searchMatches = card.textContent
+          .toLowerCase()
+          .includes(searchQuery);
+        const visible = answerMatches && searchMatches;
+        card.hidden = !visible;
+        if (visible) visibleCards += 1;
+      });
+      group.hidden = visibleCards === 0;
+    });
+    document.querySelectorAll(".filters button").forEach((button) => {
+      const value = button.textContent.trim().toLowerCase().replace("/", "");
+      button.classList.toggle("on", value === activeFilter);
+      button.setAttribute(
+        "aria-pressed",
+        value === activeFilter ? "true" : "false",
+      );
+    });
+  }
+
+  function renderFishbone(cause) {
+    document
+      .querySelectorAll(".cause")
+      .forEach((item) => item.classList.remove("active"));
+    cause.classList.add("active");
+    const detail = document.querySelector(".detail");
+    if (!detail) return;
+    detail.className = `detail ${cause.dataset.tone || ""}`.trim();
+    detail.innerHTML = `<b>${cause.dataset.name}</b><p>${cause.dataset.ev}</p>`;
+  }
+
+  document.addEventListener("click", (event) => {
+    const answerButton = event.target.closest("[data-a]");
+    if (answerButton) {
+      const card = answerButton.closest("[data-qid]");
+      answers[card.dataset.qid] = answerButton.dataset.a;
+      saveAnswers();
+      renderAudit();
+      renderDashboard();
+      return;
+    }
+
+    const filterButton = event.target.closest(".filters button");
+    if (filterButton) {
+      activeFilter = filterButton.textContent
+        .trim()
+        .toLowerCase()
+        .replace("/", "");
+      applyAuditFilters();
+      return;
+    }
+
+    const cause = event.target.closest(".cause");
+    if (cause) renderFishbone(cause);
+  });
+
+  const search = document.getElementById("question-search");
+  if (search) {
+    search.addEventListener("input", (event) => {
+      searchQuery = event.target.value.trim().toLowerCase();
+      applyAuditFilters();
+    });
+  }
+
+  window.addEventListener("storage", (event) => {
+    if (event.key !== storageKey) return;
+    const latest = readSavedAnswers();
+    defaults.forEach((question) => {
+      if (validAnswers.has(latest[question.id])) {
+        answers[question.id] = latest[question.id];
+      }
+    });
+    renderAudit();
+    renderDashboard();
+  });
+
+  renderAudit();
+  renderDashboard();
+}
+
+const stateScriptV2 = `(${clientStateController.toString()})(${JSON.stringify(
+  questions.map(([id, clause, question, answer]) => ({
+    id,
+    clause,
+    question,
+    answer,
+  })),
+)})`;
+
 function shell(path, title, subtitle, body) {
-  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${title}</title><style>${style}</style></head><body><div class="shell"><aside class="side"><a href="/" class="brand"><i>◈</i>LQTM Audit Hub</a><nav class="nav"><small>Workspace</small><a class="${path === "/" || path === "/dashboard" ? "on" : ""}" href="/">◫ &nbsp; Dashboard</a><a class="${path === "/audit" ? "on" : ""}" href="/audit">▣ &nbsp; Audit</a><a class="${path.startsWith("/capa") ? "on" : ""}" href="/capa/2">⚠ &nbsp; CAPA</a></nav><div class="foot">● Internal audit<br><small>Draft · Jul 2026</small></div></aside><main class="main"><header class="head"><div><span class="kicker">ISO 9001:2015</span><h1>${title}</h1><p>${subtitle}</p></div></header>${body}</main></div><script>${script}</script></body></html>`;
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${title}</title><style>${style}</style></head><body><div class="shell"><aside class="side"><a href="/" class="brand"><i>◈</i>LQTM Audit Hub</a><nav class="nav"><small>Workspace</small><a class="${path === "/" || path === "/dashboard" ? "on" : ""}" href="/">◫ &nbsp; Dashboard</a><a class="${path === "/audit" ? "on" : ""}" href="/audit">▣ &nbsp; Audit</a><a class="${path.startsWith("/capa") ? "on" : ""}" href="/capa/2">⚠ &nbsp; CAPA</a></nav><div class="foot">● Internal audit<br><small>Draft · Jul 2026</small></div></aside><main class="main"><header class="head"><div><span class="kicker">ISO 9001:2015</span><h1>${title}</h1><p>${subtitle}</p></div></header>${body}</main></div><script>${stateScriptV2}</script></body></html>`;
 }
 function audit() {
   let qs = questions
@@ -205,7 +419,7 @@ function auditV3() {
       return `<section class="clause-group" data-clause-group="${clause}"><header class="clause-summary"><div><span class="kicker">Clause ${clause}</span><h2>${clauseTitles[clause] || "Quality requirement"}</h2><p data-clause-detail>${yes} Yes · ${no} No · ${na} N/A · ${applicable} applicable</p></div><div class="clause-score"><strong data-clause-rate>${rate}%</strong><span>Conformance</span><div class="clause-progress"><i data-clause-bar style="width:${rate}%"></i></div></div></header><div class="qlist">${cards}</div></section>`;
     })
     .join("");
-  const clauseUpdater = `<script>(()=>{function updateClauseScores(){document.querySelectorAll("[data-clause-group]").forEach(group=>{const cards=[...group.querySelectorAll("[data-qid]")];const count=status=>cards.filter(card=>card.classList.contains(status)).length;const yes=count("yes"),no=count("no"),na=count("na"),applicable=yes+no,rate=applicable?Math.round(yes/applicable*100):0;group.querySelector("[data-clause-rate]").textContent=rate+"%";group.querySelector("[data-clause-detail]").textContent=yes+" Yes · "+no+" No · "+na+" N/A · "+applicable+" applicable";group.querySelector("[data-clause-bar]").style.width=rate+"%"})}document.addEventListener("click",event=>{if(event.target.closest("[data-a]"))queueMicrotask(updateClauseScores)});setTimeout(updateClauseScores)})();</script>`;
+  const clauseUpdater = "";
   return shell(
     "/audit",
     "Laboratory quality audit",
