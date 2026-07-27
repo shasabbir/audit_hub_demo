@@ -44,8 +44,8 @@ export function Shell({ children, eyebrow, title, subtitle, actions }) {
         <div className="audit-card">
           <span className="live-dot" />
           <div>
-            <strong>Internal audit</strong>
-            <small>Draft · Jul 2026</small>
+            <strong>Developed by</strong>
+            <strong>D2A2I</strong>
           </div>
         </div>
       </aside>

@@ -589,7 +589,7 @@ const stateScriptV2 = `(${clientStateController.toString()})(${JSON.stringify(
 )})`;
 
 function shell(path, title, subtitle, body) {
-  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${title}</title><style>${style}</style></head><body><div class="shell"><aside class="side"><a href="/" class="brand"><i>◈</i><span style="display:inline-block;max-width:145px;font-size:13px;line-height:1.35;vertical-align:middle">Quality Management<br>System</span></a><nav class="nav"><small>Workspace</small><a class="${path === "/" || path === "/dashboard" ? "on" : ""}" href="/">◫ &nbsp; Dashboard</a><a class="${path === "/audit" ? "on" : ""}" href="/audit">▣ &nbsp; Audit</a></nav><div class="foot">● Internal audit<br><small>Draft · Jul 2026</small></div></aside><main class="main"><header class="head"><div><span class="kicker">ISO 9001:2015 Standard</span><h1>${title}</h1><p>${subtitle}</p></div></header>${body}</main></div><script>${stateScriptV2}</script></body></html>`;
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${title}</title><style>${style}</style></head><body><div class="shell"><aside class="side"><a href="/" class="brand"><i>◈</i><span style="display:inline-block;max-width:145px;font-size:13px;line-height:1.35;vertical-align:middle">Quality Management<br>System</span></a><nav class="nav"><small>Workspace</small><a class="${path === "/" || path === "/dashboard" ? "on" : ""}" href="/">◫ &nbsp; Dashboard</a><a class="${path === "/audit" ? "on" : ""}" href="/audit">▣ &nbsp; Audit</a></nav><div class="foot">● Developed by<br><strong>D2A2I</strong></div></aside><main class="main"><header class="head"><div><span class="kicker">ISO 9001:2015 Standard</span><h1>${title}</h1><p>${subtitle}</p></div></header>${body}</main></div><script>${stateScriptV2}</script></body></html>`;
 }
 function audit() {
   let qs = questions
@@ -600,7 +600,7 @@ function audit() {
     .join("");
   return shell(
     "/audit",
-    "Laboratory quality audit",
+    "Laboratory Quality Audit",
     "Assess each requirement and open a CAPA when a response is nonconforming.",
     `<section class="summary"><div><span>Questions</span><strong>9</strong></div><div><span>Answered</span><strong>9/9</strong></div><div><span>Conforming</span><strong>56%</strong></div><div><span>Audit progress</span><strong>100%</strong></div></section><div class="toolbar"><input class="search" placeholder="Search question or clause"><div class="filters"><button class="on">All</button><button>YES</button><button>NO</button><button>N/A</button></div></div><div class="qlist">${qs}</div>`,
   );
@@ -672,7 +672,7 @@ function auditV2() {
     .join("");
   return shell(
     "/audit",
-    "Laboratory quality audit",
+    "Laboratory Quality Audit",
     "Assess each requirement and open a CAPA when a response is nonconforming.",
     `<style>.answers{align-items:center}.finding-slot{margin-left:auto}.answers button.active{transform:translateY(-1px);box-shadow:0 5px 12px rgb(17 47 81/10%)}</style><section class="summary"><div><span>Questions</span><strong>${questions.length}</strong></div><div><span>Answered</span><strong id="answered-count">0/${questions.length}</strong></div><div><span>Conforming</span><strong id="conformance-count">0%</strong></div><div><span>Audit progress</span><strong id="progress-count">0%</strong></div></section><div class="toolbar"><input class="search" id="question-search" placeholder="Search question or clause"><div class="filters"><button class="on">All</button><button>YES</button><button>NO</button><button>N/A</button></div></div><div class="qlist">${cards}</div>`,
   );
@@ -744,7 +744,7 @@ function auditV3() {
   const clauseUpdater = "";
   return shell(
     "/audit",
-    "Laboratory quality audit",
+    "Laboratory Quality Audit",
     "Assess each requirement and open a CAPA when a response is nonconforming.",
     `<style>.answers{align-items:center}.finding-slot{margin-left:auto}.answers button.active{transform:translateY(-1px);box-shadow:0 5px 12px rgb(17 47 81/10%)}.clause-list{display:grid;gap:24px}.clause-group{display:grid;gap:11px}.clause-summary{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:18px 20px;border:1px solid #cfe1d8;border-radius:14px;background:linear-gradient(135deg,#f8fcfa,#edf7f2)}.clause-summary h2{margin:4px 0 5px}.clause-summary p{margin:0;color:#6d7b75;font-size:11px}.clause-score{min-width:185px;text-align:right}.clause-score strong{display:block;color:#0b7251;font-size:25px}.clause-score span{display:block;color:#6d7b75;font-size:10px;text-transform:uppercase;letter-spacing:.08em}.clause-progress{height:7px;margin-top:8px;overflow:hidden;border-radius:99px;background:#dce8e2}.clause-progress i{display:block;height:100%;border-radius:inherit;background:#0b7251;transition:width .35s ease}@media(max-width:600px){.clause-summary{align-items:flex-start}.clause-score{min-width:110px}}</style><section class="summary"><div><span>Questions</span><strong>${questions.length}</strong></div><div><span>Answered</span><strong id="answered-count">0/${questions.length}</strong></div><div><span>Conforming</span><strong id="conformance-count">0%</strong></div><div><span>Audit progress</span><strong id="progress-count">0%</strong></div></section><div class="toolbar"><input class="search" id="question-search" placeholder="Search question or clause"><div class="filters"><button class="on">All</button><button>YES</button><button>NO</button><button>N/A</button></div></div><div class="clause-list">${clauseGroups}</div>${clauseUpdater}`,
   );
