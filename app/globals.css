@@ -1190,6 +1190,140 @@ td:first-child small {
   }
 }
 
+/* Dashboard time-series bar charts */
+.time-chart-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 0.85fr;
+  gap: 14px;
+  margin: 14px 0;
+}
+.chart-card {
+  position: relative;
+  overflow: hidden;
+}
+.chart-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.chart-title h2 {
+  margin: 4px 0 3px;
+  font-size: 17px;
+}
+.dummy-pill {
+  display: inline-flex;
+  padding: 5px 8px;
+  border: 1px solid #d9e2ef;
+  border-radius: 999px;
+  background: #f5f8fb;
+  color: #65758a;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.column-chart {
+  height: 250px;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  margin-top: 25px;
+  padding: 18px 8px 28px;
+  border-bottom: 1px solid #cfd8d3;
+  background: repeating-linear-gradient(
+    to top,
+    transparent 0,
+    transparent 49px,
+    #e8eeeb 50px
+  );
+}
+.chart-column {
+  position: relative;
+  height: 100%;
+  min-width: 24px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: column;
+}
+.chart-column i {
+  display: block;
+  width: min(32px, 72%);
+  min-height: 3px;
+  border-radius: 7px 7px 2px 2px;
+  background: #1b76d1;
+  box-shadow: inset 0 1px rgb(255 255 255 / 25%);
+  transform-origin: bottom;
+  animation: bar-rise 0.75s var(--delay, 0s) cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transition:
+    filter 0.2s,
+    transform 0.2s;
+}
+.chart-column:nth-child(2n) i {
+  background: #155fac;
+}
+.chart-column:hover i {
+  filter: brightness(1.12);
+  transform: scaleX(1.08);
+}
+.chart-column small {
+  position: absolute;
+  bottom: -23px;
+  color: #708078;
+  font-size: 9px;
+  font-weight: 700;
+}
+.bar-value {
+  margin-bottom: 5px;
+  color: #31443c;
+  font-size: 9px;
+  font-weight: 800;
+}
+.yearly-column i {
+  width: min(48px, 58%);
+  background: #79b8a1;
+}
+.yearly-column i.current {
+  background: #0b7251;
+}
+.chart-note {
+  margin: 12px 4px 0;
+  color: #74827c;
+  font-size: 10px;
+}
+.chart-note strong {
+  color: #34473f;
+}
+@keyframes bar-rise {
+  from {
+    scale: 1 0;
+    opacity: 0.35;
+  }
+  to {
+    scale: 1 1;
+    opacity: 1;
+  }
+}
+@media (max-width: 950px) {
+  .time-chart-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .column-chart {
+    gap: 5px;
+    overflow-x: auto;
+  }
+  .chart-column {
+    min-width: 28px;
+  }
+  .bar-value {
+    font-size: 8px;
+  }
+}
+
 /* Interactive 6M fishbone — v2 */
 .fishbone-v2 {
   --bone: #102f63;

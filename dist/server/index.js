@@ -180,6 +180,49 @@ function dashboardV2() {
   );
 }
 
+function dashboardV3() {
+  const monthly = [
+    ["Jan", 5],
+    ["Feb", 7],
+    ["Mar", 6],
+    ["Apr", 9],
+    ["May", 8],
+    ["Jun", 11],
+    ["Jul", 10],
+    ["Aug", 12],
+    ["Sep", 9],
+    ["Oct", 13],
+    ["Nov", 12],
+    ["Dec", 15],
+  ];
+  const yearly = [
+    ["2022", 61],
+    ["2023", 68],
+    ["2024", 72],
+    ["2025", 78],
+    ["2026", 83],
+  ];
+  const monthlyBars = monthly
+    .map(
+      ([label, value]) =>
+        `<div class="chart-column" title="${label}: ${value} audits"><span class="bar-value">${value}</span><i style="height:${Math.round((value / 15) * 100)}%"></i><small>${label}</small></div>`,
+    )
+    .join("");
+  const yearlyBars = yearly
+    .map(
+      ([label, value], index) =>
+        `<div class="chart-column yearly-column" title="${label}: ${value}% conformance"><span class="bar-value">${value}%</span><i class="${index === yearly.length - 1 ? "current" : ""}" style="height:${value}%"></i><small>${label}</small></div>`,
+    )
+    .join("");
+  const chartStyles = `.time-chart-grid{display:grid;grid-template-columns:1.35fr .85fr;gap:14px;margin:14px 0}.chart-card{position:relative;overflow:hidden}.chart-title{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.chart-title h2{margin-bottom:3px}.dummy-pill{display:inline-flex;padding:5px 8px;border:1px solid #d9e2ef;border-radius:999px;background:#f5f8fb;color:#65758a;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.07em}.column-chart{height:250px;display:flex;align-items:flex-end;gap:10px;margin-top:25px;padding:18px 8px 28px;border-bottom:1px solid #cfd8d3;background:repeating-linear-gradient(to top,transparent 0,transparent 49px,#e8eeeb 50px)}.chart-column{position:relative;display:flex;flex:1;height:100%;min-width:24px;align-items:center;justify-content:flex-end;flex-direction:column}.chart-column i{display:block;width:min(32px,72%);min-height:3px;border-radius:7px 7px 2px 2px;background:#1b76d1;box-shadow:inset 0 1px rgb(255 255 255/25%);transform-origin:bottom;animation:bar-rise .75s var(--delay,0s) cubic-bezier(.2,.8,.2,1) both;transition:filter .2s,transform .2s}.chart-column:nth-child(2n) i{background:#155fac}.chart-column:hover i{filter:brightness(1.12);transform:scaleX(1.08)}.chart-column small{position:absolute;bottom:-23px;color:#708078;font-size:9px;font-weight:700}.bar-value{margin-bottom:5px;color:#31443c;font-size:9px;font-weight:800}.yearly-column i{width:min(48px,58%);background:#79b8a1}.yearly-column i.current{background:#0b7251}.chart-note{margin:12px 4px 0;color:#74827c;font-size:10px}.chart-note strong{color:#34473f}@keyframes bar-rise{from{scale:1 0;opacity:.35}to{scale:1 1;opacity:1}}@media(max-width:950px){.time-chart-grid{grid-template-columns:1fr}}@media(max-width:600px){.column-chart{gap:5px;overflow-x:auto}.chart-column{min-width:28px}.bar-value{font-size:8px}}`;
+  return shell(
+    "/dashboard",
+    "Audit dashboard",
+    "A decision-ready view of conformance, findings, ownership, and CAPA progress.",
+    `<style>${chartStyles}</style><section class="metrics"><div class="metric"><span>Conformance rate</span><strong id="dashboard-conformance">0%</strong><small>Based on saved applicable responses</small></div><div class="metric"><span>Open findings</span><strong id="dashboard-open">0</strong><small>Updated from the audit page</small></div><div class="metric"><span>CAPA completion</span><strong>26%</strong></div><div class="metric"><span>Evidence coverage</span><strong>67%</strong></div></section><section class="time-chart-grid"><article class="panel chart-card"><div class="chart-title"><div><span class="kicker">Monthly activity</span><h2>Audits completed by month</h2><span class="muted">Number of completed audits · Jan–Dec 2026</span></div><span class="dummy-pill">Dummy data</span></div><div class="column-chart">${monthlyBars}</div><p class="chart-note"><strong>Prototype insight:</strong> audit volume increases through the second half of the year.</p></article><article class="panel chart-card"><div class="chart-title"><div><span class="kicker">Yearly performance</span><h2>Annual conformance rate</h2><span class="muted">Applicable controls rated conforming · 2022–2026</span></div><span class="dummy-pill">Dummy data</span></div><div class="column-chart">${yearlyBars}</div><p class="chart-note"><strong>Prototype insight:</strong> conformance improves from 61% to 83% over five years.</p></article></section><section class="grid"><article class="panel"><span class="kicker">Clause health</span><h2>Performance by section</h2><div class="bars"><div><label>4.1 Context <b>33%</b></label><div class="bar"><i class="red" style="width:33%"></i></div></div><div><label>4.2 Interested parties <b>50%</b></label><div class="bar"><i class="amber" style="width:50%"></i></div></div><div><label>4.3 Scope <b>100%</b></label><div class="bar"><i style="width:100%"></i></div></div></div></article><article class="panel"><span class="kicker">Overall analysis</span><h2>Live audit status</h2><p class="muted">Response totals and open findings are loaded from the answers saved on this device.</p></article></section><section class="panel"><h2>Nonconformities & CAPA</h2><table><thead><tr><th>Finding</th><th>Priority</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead><tbody id="findings-body"></tbody></table></section>`,
+  );
+}
+
 function capaV2(id) {
   const q = questions.find((item) => item[0] === Number(id)) || questions[1];
   const finding = findings[id] || findings[2];
@@ -258,7 +301,7 @@ export default {
     let p = new URL(req.url).pathname;
     let html =
       p === "/dashboard"
-        ? dashboardV2()
+        ? dashboardV3()
         : p.startsWith("/capa/")
           ? capaV2(p.split("/")[2])
           : auditV2();

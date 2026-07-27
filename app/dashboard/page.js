@@ -16,6 +16,27 @@ export default function Dashboard() {
   const na = questions.filter((q) => q.answer === "na").length;
   const rate = Math.round((yes / (yes + no)) * 100);
   const findings = Object.entries(capas);
+  const monthly = [
+    ["Jan", 5],
+    ["Feb", 7],
+    ["Mar", 6],
+    ["Apr", 9],
+    ["May", 8],
+    ["Jun", 11],
+    ["Jul", 10],
+    ["Aug", 12],
+    ["Sep", 9],
+    ["Oct", 13],
+    ["Nov", 12],
+    ["Dec", 15],
+  ];
+  const yearly = [
+    ["2022", 61],
+    ["2023", 68],
+    ["2024", 72],
+    ["2025", 78],
+    ["2026", 83],
+  ];
   return (
     <Shell
       eyebrow="Overall analysis"
@@ -52,6 +73,71 @@ export default function Dashboard() {
           <small>6 of 9 questions supported</small>
           <CheckCircle2 size={24} />
         </div>
+      </section>
+      <section className="time-chart-grid">
+        <article className="panel chart-card">
+          <div className="chart-title">
+            <div>
+              <span className="eyebrow">Monthly activity</span>
+              <h2>Audits completed by month</h2>
+              <span className="muted">
+                Number of completed audits · Jan–Dec 2026
+              </span>
+            </div>
+            <span className="dummy-pill">Dummy data</span>
+          </div>
+          <div className="column-chart">
+            {monthly.map(([label, value], index) => (
+              <div
+                className="chart-column"
+                key={label}
+                title={`${label}: ${value} audits`}
+                style={{ "--delay": `${index * 0.04}s` }}
+              >
+                <span className="bar-value">{value}</span>
+                <i style={{ height: `${Math.round((value / 15) * 100)}%` }} />
+                <small>{label}</small>
+              </div>
+            ))}
+          </div>
+          <p className="chart-note">
+            <strong>Prototype insight:</strong> audit volume increases through
+            the second half of the year.
+          </p>
+        </article>
+        <article className="panel chart-card">
+          <div className="chart-title">
+            <div>
+              <span className="eyebrow">Yearly performance</span>
+              <h2>Annual conformance rate</h2>
+              <span className="muted">
+                Applicable controls rated conforming · 2022–2026
+              </span>
+            </div>
+            <span className="dummy-pill">Dummy data</span>
+          </div>
+          <div className="column-chart">
+            {yearly.map(([label, value], index) => (
+              <div
+                className="chart-column yearly-column"
+                key={label}
+                title={`${label}: ${value}% conformance`}
+                style={{ "--delay": `${index * 0.06}s` }}
+              >
+                <span className="bar-value">{value}%</span>
+                <i
+                  className={index === yearly.length - 1 ? "current" : ""}
+                  style={{ height: `${value}%` }}
+                />
+                <small>{label}</small>
+              </div>
+            ))}
+          </div>
+          <p className="chart-note">
+            <strong>Prototype insight:</strong> conformance improves from 61% to
+            83% over five years.
+          </p>
+        </article>
       </section>
       <section className="dashboard-grid">
         <article className="panel score-panel">
