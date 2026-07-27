@@ -18,8 +18,8 @@ export function Shell({ children, eyebrow, title, subtitle, actions }) {
             <FlaskConical size={22} />
           </span>
           <span>
-            <strong>LABORATORY QUALITY</strong>
-            <small>THINKING MODEL (LQTM)</small>
+            <strong>Quality Management</strong>
+            <small>System</small>
           </span>
         </Link>
         <nav>
