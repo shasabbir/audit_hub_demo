@@ -1189,3 +1189,388 @@ td:first-child small {
     display: none;
   }
 }
+
+/* Interactive 6M fishbone — v2 */
+.fishbone-v2 {
+  --bone: #102f63;
+  position: relative;
+  border: 1px solid #d9e2ef;
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 85% 16%, #dfeeff 0, transparent 24%),
+    radial-gradient(circle at 9% 92%, #e6f7ef 0, transparent 27%), #fff;
+  box-shadow: 0 20px 50px rgb(17 47 81 / 9%);
+}
+.fishbone-v2 .fishbone-heading {
+  position: relative;
+  z-index: 2;
+}
+.fishbone-v2 .fishbone-heading h2 {
+  margin-top: 5px;
+  font-size: 20px;
+  color: #102f63;
+}
+.fishbone-v2 .fishbone-heading p {
+  margin: 6px 0 0;
+  color: #738193;
+  font-size: 11px;
+}
+.fishbone-v2 .pulse-label {
+  padding: 8px 12px;
+  color: #0b7251;
+  border: 1px solid #b9ddcf;
+  background: rgb(231 246 239 / 86%);
+  border-radius: 999px;
+  animation: live-pill 2.6s ease-in-out infinite;
+}
+.fishbone-v2 .fishbone-stage {
+  height: 390px;
+  margin-top: 15px;
+}
+.fishbone-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.34;
+  background-image:
+    linear-gradient(#d9e3ef 1px, transparent 1px),
+    linear-gradient(90deg, #d9e3ef 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 86%,
+    transparent
+  );
+}
+.fishbone-v2 .fish-spine {
+  left: 5%;
+  right: 17%;
+  height: 5px;
+  background: linear-gradient(90deg, #163970, #0c2e62);
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgb(16 47 99 / 22%);
+  overflow: visible;
+}
+.fishbone-v2 .fish-spine::after {
+  right: -16px;
+  top: -8px;
+  border-left: 18px solid #0c2e62;
+  border-top-width: 10px;
+  border-bottom-width: 10px;
+}
+.spine-flow {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 90px;
+  height: 9px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, transparent, #61b5ff, transparent);
+  filter: blur(1px);
+  animation: spine-flow 3.2s ease-in-out infinite;
+}
+.fishbone-v2 .fish-tail {
+  left: 0;
+  width: 72px;
+  height: 94px;
+}
+.fishbone-v2 .fish-tail::before {
+  content: "";
+  position: absolute;
+  inset: 8px 15px 8px 0;
+  background: linear-gradient(135deg, #14376c, #071e46);
+  clip-path: polygon(0 0, 100% 50%, 0 100%, 22% 50%);
+  filter: drop-shadow(0 8px 9px rgb(16 47 99 / 18%));
+  animation: tail-swim 2.8s ease-in-out infinite;
+}
+.fishbone-v2 .fish-tail i {
+  display: none;
+}
+.fishbone-v2 .fish-head {
+  right: 0;
+  width: 145px;
+  min-height: 105px;
+  padding: 16px;
+  border: 2px solid #ef6b64;
+  border-radius: 45% 18px 18px 45%;
+  background: linear-gradient(145deg, #d6463f, #a9252b);
+  box-shadow:
+    0 15px 30px rgb(197 58 53 / 22%),
+    inset 0 1px rgb(255 255 255 / 24%);
+}
+.effect-icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin-bottom: 5px;
+  color: #c53a35;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 7px rgb(255 255 255 / 12%);
+}
+.fishbone-v2 .fish-head span:not(.effect-icon) {
+  color: #ffe5e2;
+}
+.fishbone-v2 .fish-head strong {
+  font-size: 12px;
+}
+.fishbone-v2 .fish-cause {
+  width: 150px;
+  height: 164px;
+  transition:
+    filter 0.25s ease,
+    transform 0.25s ease;
+}
+.fishbone-v2 .fish-cause.top {
+  transform: translate(-50%, -100%);
+}
+.fishbone-v2 .fish-cause.bottom {
+  transform: translate(-50%, 0);
+}
+.fishbone-v2 .fish-cause:hover.top,
+.fishbone-v2 .fish-cause.active.top {
+  transform: translate(-50%, calc(-100% - 5px));
+}
+.fishbone-v2 .fish-cause:hover.bottom,
+.fishbone-v2 .fish-cause.active.bottom {
+  transform: translate(-50%, 5px);
+}
+.fishbone-v2 .fish-cause .branch {
+  width: 4px;
+  height: 100px;
+  border-radius: 8px;
+  background: linear-gradient(var(--cause), var(--bone));
+  box-shadow: 0 0 10px color-mix(in srgb, var(--cause) 32%, transparent);
+  animation: branch-grow 0.7s var(--delay) cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.fishbone-v2 .fish-cause.top .branch {
+  transform: rotate(-32deg);
+}
+.fishbone-v2 .fish-cause.bottom .branch {
+  transform: rotate(32deg);
+}
+.fishbone-v2 .fish-cause .node {
+  width: 16px;
+  height: 16px;
+  left: calc(50% - 8px);
+  border: 4px solid #fff;
+  background: var(--cause);
+  box-shadow:
+    0 0 0 3px var(--cause),
+    0 0 0 9px color-mix(in srgb, var(--cause) 14%, transparent);
+  animation: node-pulse 2.4s calc(var(--delay) + 0.8s) ease-in-out infinite;
+}
+.fishbone-v2 .fish-cause .cause-label {
+  position: absolute;
+  left: 0;
+  width: 145px;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  color: #fff;
+  background: linear-gradient(135deg, var(--cause), var(--cause-dark));
+  border: 1px solid color-mix(in srgb, var(--cause) 70%, #fff);
+  border-radius: 11px;
+  box-shadow: 0 9px 18px color-mix(in srgb, var(--cause) 18%, transparent);
+}
+.fishbone-v2 .fish-cause.top .cause-label {
+  top: 5px;
+}
+.fishbone-v2 .fish-cause.bottom .cause-label {
+  bottom: 5px;
+}
+.fishbone-v2 .cause-label b {
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  min-width: 43px;
+  color: var(--cause);
+  background: rgb(255 255 255 / 94%);
+  font: 900 20px Manrope;
+}
+.fishbone-v2 .cause-label strong {
+  position: static;
+  width: auto;
+  padding: 0 11px;
+  color: #fff;
+  font-size: 11px;
+}
+.fishbone-v2 .fish-cause small {
+  width: 132px;
+  display: flex;
+  gap: 6px;
+  color: #3f4f61;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.fishbone-v2 .fish-cause small svg {
+  flex: 0 0 auto;
+  color: var(--cause);
+}
+.fishbone-v2 .fish-cause.top small {
+  top: 56px;
+}
+.fishbone-v2 .fish-cause.bottom small {
+  bottom: 57px;
+}
+.fishbone-v2 .fish-cause.active {
+  filter: saturate(1.2);
+}
+.fishbone-v2 .fish-cause.emerald {
+  --cause: #07944f;
+  --cause-dark: #04763f;
+}
+.fishbone-v2 .fish-cause.blue {
+  --cause: #0878dc;
+  --cause-dark: #075bb3;
+}
+.fishbone-v2 .fish-cause.violet {
+  --cause: #8a2fad;
+  --cause-dark: #6d1d8c;
+}
+.fishbone-v2 .fish-cause.cyan {
+  --cause: #079ca2;
+  --cause-dark: #06787e;
+}
+.fishbone-v2 .fish-cause.orange {
+  --cause: #f08000;
+  --cause-dark: #c76500;
+}
+.fishbone-v2 .fish-cause.green {
+  --cause: #188a3f;
+  --cause-dark: #0f6c30;
+}
+.fishbone-v2 .cause-detail {
+  border-color: color-mix(in srgb, var(--detail) 28%, #fff);
+  background: color-mix(in srgb, var(--detail) 8%, #fff);
+  box-shadow: inset 4px 0 var(--detail);
+}
+.fishbone-v2 .cause-detail.emerald {
+  --detail: #07944f;
+}
+.fishbone-v2 .cause-detail.blue {
+  --detail: #0878dc;
+}
+.fishbone-v2 .cause-detail.violet {
+  --detail: #8a2fad;
+}
+.fishbone-v2 .cause-detail.cyan {
+  --detail: #079ca2;
+}
+.fishbone-v2 .cause-detail.orange {
+  --detail: #f08000;
+}
+.fishbone-v2 .cause-detail.green {
+  --detail: #188a3f;
+}
+.fishbone-v2 .cause-badge {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  background: var(--detail);
+  font: 900 20px Manrope;
+}
+.fishbone-v2 .cause-detail > svg {
+  color: var(--detail);
+}
+.detail-meta {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--detail);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+@keyframes spine-flow {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+  18%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    left: calc(100% - 90px);
+    opacity: 0;
+  }
+}
+@keyframes branch-grow {
+  from {
+    opacity: 0;
+    scale: 1 0;
+  }
+  to {
+    opacity: 1;
+    scale: 1 1;
+  }
+}
+@keyframes node-pulse {
+  50% {
+    box-shadow:
+      0 0 0 3px var(--cause),
+      0 0 0 14px color-mix(in srgb, var(--cause) 0%, transparent);
+  }
+}
+@keyframes tail-swim {
+  50% {
+    transform: scaleX(0.88);
+  }
+}
+@keyframes live-pill {
+  50% {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 18px rgb(11 114 81 / 12%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fishbone-v2 *,
+  .fishbone-v2 *::before,
+  .fishbone-v2 *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+@media (max-width: 760px) {
+  .fishbone-v2 .fishbone-stage {
+    height: auto;
+  }
+  .fishbone-v2 .fishbone-grid {
+    display: none;
+  }
+  .fishbone-v2 .fish-cause,
+  .fishbone-v2 .fish-cause.top,
+  .fishbone-v2 .fish-cause.bottom,
+  .fishbone-v2 .fish-cause:hover.top,
+  .fishbone-v2 .fish-cause:hover.bottom,
+  .fishbone-v2 .fish-cause.active.top,
+  .fishbone-v2 .fish-cause.active.bottom {
+    min-height: 104px;
+    transform: none;
+    padding: 10px;
+    background: #fff;
+    border-color: color-mix(in srgb, var(--cause) 35%, #e5e9e7);
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--cause) 8%, transparent);
+  }
+  .fishbone-v2 .fish-cause .cause-label,
+  .fishbone-v2 .fish-cause.top .cause-label,
+  .fishbone-v2 .fish-cause.bottom .cause-label {
+    position: static;
+    width: 100%;
+    min-height: 38px;
+  }
+  .fishbone-v2 .fish-cause small,
+  .fishbone-v2 .fish-cause.top small,
+  .fishbone-v2 .fish-cause.bottom small {
+    position: static;
+    width: auto;
+    margin-top: 9px;
+  }
+}

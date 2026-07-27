@@ -1,111 +1,149 @@
 "use client";
 
 import { useState } from "react";
-import { Activity, ChevronRight } from "lucide-react";
+import { Activity, ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
 
 const causes = [
   {
     id: "method",
     label: "Method",
     side: "top",
-    pos: 13,
-    cause: "No controlled context-review method",
+    pos: 17,
+    tone: "emerald",
+    cause: "No formal method is established",
     evidence:
-      "The QMS procedure does not define review criteria, frequency, or approval.",
+      "There is no controlled method for identifying and documenting relevant internal and external QMS issues.",
+    status: "Probable cause",
   },
   {
-    id: "people",
-    label: "People",
-    side: "bottom",
-    pos: 28,
-    cause: "Ownership is unclear",
-    evidence: "No accountable role is assigned in the responsibility matrix.",
+    id: "manpower",
+    label: "Manpower",
+    side: "top",
+    pos: 43,
+    tone: "blue",
+    cause: "Review responsibility is unclear",
+    evidence:
+      "Responsibility for reviewing organizational context is not clearly assigned.",
+    status: "Probable cause",
+  },
+  {
+    id: "management",
+    label: "Management",
+    side: "top",
+    pos: 69,
+    tone: "violet",
+    cause: "Changes are not reviewed as planned",
+    evidence:
+      "Management has not established planned intervals or change-triggered reviews for internal and external issues.",
+    status: "Probable cause",
   },
   {
     id: "measurement",
     label: "Measurement",
-    side: "top",
-    pos: 43,
-    cause: "No effectiveness criteria",
-    evidence:
-      "Completion is measured as one document, not adequacy or sustained performance.",
-  },
-  {
-    id: "system",
-    label: "System",
     side: "bottom",
-    pos: 58,
-    cause: "Review is not workflow-driven",
+    pos: 22,
+    tone: "cyan",
+    cause: "No significant cause identified",
     evidence:
-      "Context review is absent from management-review inputs and reminders.",
+      "No measurement-related cause has been confirmed at this stage of the investigation.",
+    status: "Not identified",
   },
   {
-    id: "environment",
-    label: "Environment",
-    side: "top",
-    pos: 73,
-    cause: "Changes are not trigger events",
-    evidence:
-      "Regulatory, market, technology, and climate changes do not initiate review.",
-  },
-  {
-    id: "records",
-    label: "Records",
+    id: "material",
+    label: "Material",
     side: "bottom",
-    pos: 86,
-    cause: "Evidence is not retained",
+    pos: 48,
+    tone: "orange",
+    cause: "No significant cause identified",
     evidence:
-      "Version, approval, decisions, and follow-up actions are not consistently recorded.",
+      "No material or information-input cause has been confirmed at this stage.",
+    status: "Not identified",
+  },
+  {
+    id: "machine",
+    label: "Machine",
+    side: "bottom",
+    pos: 74,
+    tone: "green",
+    cause: "No significant cause identified",
+    evidence:
+      "No equipment, software, or infrastructure cause has been confirmed at this stage.",
+    status: "Not identified",
   },
 ];
 
 export default function Fishbone({ finding }) {
   const [active, setActive] = useState(causes[0]);
+
   return (
-    <article className="fishbone-card">
+    <article className="fishbone-card fishbone-v2">
       <div className="fishbone-heading">
         <div>
-          <span className="eyebrow">Cause & effect analysis</span>
-          <h2>Interactive fishbone · 6M</h2>
+          <span className="eyebrow">Root cause analysis</span>
+          <h2>Interactive 6M fishbone diagram</h2>
+          <p>Explore each category to review probable and excluded causes.</p>
         </div>
         <span className="pulse-label">
-          <i />
-          Click a cause
+          <Sparkles size={14} />
+          Live analysis
         </span>
       </div>
+
       <div className="fishbone-stage">
-        <div className="fish-spine" />
+        <div className="fishbone-grid" />
+        <div className="fish-spine">
+          <span className="spine-flow" />
+        </div>
         <div className="fish-tail">
           <i />
           <i />
         </div>
         <div className="fish-head">
-          <Activity size={19} />
+          <span className="effect-icon">
+            <Activity size={20} />
+          </span>
           <span>Effect</span>
           <strong>QMS context gap</strong>
         </div>
-        {causes.map((c, i) => (
+
+        {causes.map((cause, index) => (
           <button
-            key={c.id}
-            style={{ left: `${c.pos}%`, "--delay": `${i * 0.12}s` }}
-            onClick={() => setActive(c)}
-            className={`fish-cause ${c.side} ${active.id === c.id ? "active" : ""}`}
+            key={cause.id}
+            style={{
+              left: `${cause.pos}%`,
+              "--delay": `${index * 0.13}s`,
+            }}
+            onClick={() => setActive(cause)}
+            className={`fish-cause ${cause.side} ${cause.tone} ${
+              active.id === cause.id ? "active" : ""
+            }`}
           >
             <span className="branch" />
             <i className="node" />
-            <strong>{c.label}</strong>
-            <small>{c.cause}</small>
+            <span className="cause-label">
+              <b>M</b>
+              <strong>{cause.label}</strong>
+            </span>
+            <small>
+              <ArrowRight size={13} />
+              {cause.cause}
+            </small>
           </button>
         ))}
       </div>
-      <div className="cause-detail" key={active.id}>
-        <span className="cause-badge">{active.label}</span>
+
+      <div className={`cause-detail ${active.tone}`} key={active.id}>
+        <span className="cause-badge">M</span>
         <div>
+          <span className="detail-meta">
+            {active.label} · {active.status}
+          </span>
           <strong>{active.cause}</strong>
           <p>{active.evidence}</p>
         </div>
-        <ChevronRight size={20} />
+        <CheckCircle2 size={22} />
       </div>
+
       <p className="fish-caption">
         <strong>Observed effect:</strong> {finding}
       </p>
