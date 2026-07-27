@@ -42,8 +42,18 @@ export default function AuditPage() {
       ),
     [questions, filter, query],
   );
+  const clauseGroups = useMemo(() => {
+    const groups = new Map();
+    visible.forEach((question) => {
+      if (!groups.has(question.clause)) groups.set(question.clause, []);
+      groups.get(question.clause).push(question);
+    });
+    return [...groups.entries()];
+  }, [visible]);
   const answered = questions.filter((q) => q.answer !== "").length;
   const compliant = questions.filter((q) => q.answer === "yes").length;
+  const noncompliant = questions.filter((q) => q.answer === "no").length;
+  const applicable = compliant + noncompliant;
   const update = (id, answer) =>
     setQuestions((items) => {
       const updated = items.map((q) => (q.id === id ? { ...q, answer } : q));
@@ -87,7 +97,9 @@ export default function AuditPage() {
         </div>
         <div>
           <span>Conforming</span>
-          <strong>{Math.round((compliant / questions.length) * 100)}%</strong>
+          <strong>
+            {applicable ? Math.round((compliant / applicable) * 100) : 0}%
+          </strong>
         </div>
         <div className="progress-cell">
           <span>Audit progress</span>
@@ -117,45 +129,92 @@ export default function AuditPage() {
           ))}
         </div>
       </section>
-      <div className="question-list">
-        {visible.map((q, index) => (
-          <article className={`question-card ${q.answer}`} key={q.id}>
-            <div className="question-number">
-              {String(index + 1).padStart(2, "0")}
-            </div>
-            <div className="question-body">
-              <div className="question-meta">
-                <span>Clause {q.clause}</span>
-                <span>{q.section}</span>
-              </div>
-              <h2>{q.question}</h2>
-              <div className="answer-row">
-                <div className="answer-options">
-                  {["yes", "no", "na"].map((answer) => (
-                    <button
-                      key={answer}
-                      onClick={() => update(q.id, answer)}
-                      className={q.answer === answer ? "active" : ""}
-                    >
-                      {answer === "yes" && <Check size={16} />}{" "}
-                      {answer === "no" && <CircleAlert size={16} />}{" "}
-                      {answer.toUpperCase()}
-                    </button>
-                  ))}
+      <div className="clause-list">
+        {clauseGroups.map(([clause, items]) => {
+          const allClauseQuestions = questions.filter(
+            (question) => question.clause === clause,
+          );
+          const yes = allClauseQuestions.filter(
+            (question) => question.answer === "yes",
+          ).length;
+          const no = allClauseQuestions.filter(
+            (question) => question.answer === "no",
+          ).length;
+          const na = allClauseQuestions.filter(
+            (question) => question.answer === "na",
+          ).length;
+          const clauseApplicable = yes + no;
+          const rate = clauseApplicable
+            ? Math.round((yes / clauseApplicable) * 100)
+            : 0;
+          return (
+            <section className="clause-group" key={clause}>
+              <header className="clause-summary">
+                <div>
+                  <span className="eyebrow">Clause {clause}</span>
+                  <h2>{items[0].section}</h2>
+                  <p>
+                    {yes} Yes · {no} No · {na} N/A · {clauseApplicable}{" "}
+                    applicable
+                  </p>
                 </div>
-                {q.answer === "no" && (
-                  <Link className="capa-link" href={`/capa/${q.id}`}>
-                    Open finding <ArrowRight size={15} />
-                  </Link>
-                )}
+                <div className="clause-score">
+                  <strong>{rate}%</strong>
+                  <span>Conformance</span>
+                  <div className="clause-progress">
+                    <i style={{ width: `${rate}%` }} />
+                  </div>
+                </div>
+              </header>
+              <div className="question-list">
+                {items.map((q) => (
+                  <article className={`question-card ${q.answer}`} key={q.id}>
+                    <div className="question-number">
+                      {String(
+                        questions.findIndex(
+                          (question) => question.id === q.id,
+                        ) + 1,
+                      ).padStart(2, "0")}
+                    </div>
+                    <div className="question-body">
+                      <div className="question-meta">
+                        <span>Clause {q.clause}</span>
+                        <span>{q.section}</span>
+                      </div>
+                      <h2>{q.question}</h2>
+                      <div className="answer-row">
+                        <div className="answer-options">
+                          {["yes", "no", "na"].map((answer) => (
+                            <button
+                              key={answer}
+                              onClick={() => update(q.id, answer)}
+                              className={q.answer === answer ? "active" : ""}
+                            >
+                              {answer === "yes" && <Check size={16} />}{" "}
+                              {answer === "no" && <CircleAlert size={16} />}{" "}
+                              {answer.toUpperCase()}
+                            </button>
+                          ))}
+                        </div>
+                        {q.answer === "no" && (
+                          <Link className="capa-link" href={`/capa/${q.id}`}>
+                            Open finding <ArrowRight size={15} />
+                          </Link>
+                        )}
+                      </div>
+                      <button className="evidence">
+                        <span>
+                          {q.evidence || "Add evidence or auditor note"}
+                        </span>
+                        <ChevronDown size={16} />
+                      </button>
+                    </div>
+                  </article>
+                ))}
               </div>
-              <button className="evidence">
-                <span>{q.evidence || "Add evidence or auditor note"}</span>
-                <ChevronDown size={16} />
-              </button>
-            </div>
-          </article>
-        ))}
+            </section>
+          );
+        })}
       </div>
     </Shell>
   );

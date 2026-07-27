@@ -171,6 +171,49 @@ function auditV2() {
   );
 }
 
+function auditV3() {
+  const clauseTitles = {
+    4.1: "Organizational context",
+    4.2: "Interested parties",
+    4.3: "Scope of the QMS",
+    5.1: "Leadership and commitment",
+    5.2: "Quality policy",
+    6.1: "Risks and opportunities",
+  };
+  const clauseGroups = [...new Set(questions.map((question) => question[1]))]
+    .map((clause) => {
+      const clauseQuestions = questions.filter(
+        (question) => question[1] === clause,
+      );
+      const yes = clauseQuestions.filter(
+        (question) => question[3] === "yes",
+      ).length;
+      const no = clauseQuestions.filter(
+        (question) => question[3] === "no",
+      ).length;
+      const na = clauseQuestions.filter(
+        (question) => question[3] === "na",
+      ).length;
+      const applicable = yes + no;
+      const rate = applicable ? Math.round((yes / applicable) * 100) : 0;
+      const cards = clauseQuestions
+        .map(
+          ([id, questionClause, question, answer]) =>
+            `<article class="q ${answer}" data-qid="${id}"><div class="num">${String(id).padStart(2, "0")}</div><div><span class="meta">Clause ${questionClause}</span><h2>${question}</h2><div class="answers"><button class="yes" data-a="yes">&#10003; YES</button><button class="no" data-a="no">&#9888; NO</button><button class="na" data-a="na">N/A</button><span class="finding-slot" data-finding-slot></span></div></div></article>`,
+        )
+        .join("");
+      return `<section class="clause-group" data-clause-group="${clause}"><header class="clause-summary"><div><span class="kicker">Clause ${clause}</span><h2>${clauseTitles[clause] || "Quality requirement"}</h2><p data-clause-detail>${yes} Yes · ${no} No · ${na} N/A · ${applicable} applicable</p></div><div class="clause-score"><strong data-clause-rate>${rate}%</strong><span>Conformance</span><div class="clause-progress"><i data-clause-bar style="width:${rate}%"></i></div></div></header><div class="qlist">${cards}</div></section>`;
+    })
+    .join("");
+  const clauseUpdater = `<script>(()=>{function updateClauseScores(){document.querySelectorAll("[data-clause-group]").forEach(group=>{const cards=[...group.querySelectorAll("[data-qid]")];const count=status=>cards.filter(card=>card.classList.contains(status)).length;const yes=count("yes"),no=count("no"),na=count("na"),applicable=yes+no,rate=applicable?Math.round(yes/applicable*100):0;group.querySelector("[data-clause-rate]").textContent=rate+"%";group.querySelector("[data-clause-detail]").textContent=yes+" Yes · "+no+" No · "+na+" N/A · "+applicable+" applicable";group.querySelector("[data-clause-bar]").style.width=rate+"%"})}document.addEventListener("click",event=>{if(event.target.closest("[data-a]"))queueMicrotask(updateClauseScores)});setTimeout(updateClauseScores)})();</script>`;
+  return shell(
+    "/audit",
+    "Laboratory quality audit",
+    "Assess each requirement and open a CAPA when a response is nonconforming.",
+    `<style>.answers{align-items:center}.finding-slot{margin-left:auto}.answers button.active{transform:translateY(-1px);box-shadow:0 5px 12px rgb(17 47 81/10%)}.clause-list{display:grid;gap:24px}.clause-group{display:grid;gap:11px}.clause-summary{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:18px 20px;border:1px solid #cfe1d8;border-radius:14px;background:linear-gradient(135deg,#f8fcfa,#edf7f2)}.clause-summary h2{margin:4px 0 5px}.clause-summary p{margin:0;color:#6d7b75;font-size:11px}.clause-score{min-width:185px;text-align:right}.clause-score strong{display:block;color:#0b7251;font-size:25px}.clause-score span{display:block;color:#6d7b75;font-size:10px;text-transform:uppercase;letter-spacing:.08em}.clause-progress{height:7px;margin-top:8px;overflow:hidden;border-radius:99px;background:#dce8e2}.clause-progress i{display:block;height:100%;border-radius:inherit;background:#0b7251;transition:width .35s ease}@media(max-width:600px){.clause-summary{align-items:flex-start}.clause-score{min-width:110px}}</style><section class="summary"><div><span>Questions</span><strong>${questions.length}</strong></div><div><span>Answered</span><strong id="answered-count">0/${questions.length}</strong></div><div><span>Conforming</span><strong id="conformance-count">0%</strong></div><div><span>Audit progress</span><strong id="progress-count">0%</strong></div></section><div class="toolbar"><input class="search" id="question-search" placeholder="Search question or clause"><div class="filters"><button class="on">All</button><button>YES</button><button>NO</button><button>N/A</button></div></div><div class="clause-list">${clauseGroups}</div>${clauseUpdater}`,
+  );
+}
+
 function dashboardV2() {
   return shell(
     "/",
@@ -342,7 +385,7 @@ export default {
       p === "/" || p === "/dashboard"
         ? dashboardV3()
         : p === "/audit"
-          ? auditV2()
+          ? auditV3()
           : p.startsWith("/capa/")
             ? capaV2(p.split("/")[2])
             : dashboardV3();
