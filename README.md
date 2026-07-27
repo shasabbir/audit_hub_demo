@@ -23,22 +23,20 @@ connection.
 
 ## Deploy to GitHub Pages
 
-This repository includes an automatic deployment workflow for a repository
-named `audit_hub_demo`.
+This repository includes a generated static website under `docs/` for the
+`audit_hub_demo` GitHub Pages project.
 
 1. Use the GitHub repository `shasabbir/audit_hub_demo`.
 2. Push this repository's `main` branch to GitHub.
 3. Open **Settings → Pages** in GitHub.
-4. Under **Build and deployment**, select **GitHub Actions**.
-5. Open the repository's **Actions** tab and wait for
-   **Deploy GitHub Pages** to complete.
+4. Under **Build and deployment**, choose **Deploy from a branch**.
+5. Select the `main` branch and `/docs` folder, then save.
 
 The published address will have this form:
 
 `https://shasabbir.github.io/audit_hub_demo/`
 
-The workflow runs `npm run build:pages`, which generates the GitHub
-Pages-compatible site under `docs/`. To generate it manually:
+The command below generates the GitHub Pages-compatible site under `docs/`:
 
 ```powershell
 npm run build:pages
