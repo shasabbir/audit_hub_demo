@@ -101,7 +101,7 @@ export default function Dashboard() {
   return (
     <Shell
       eyebrow="Overall analysis"
-      title="Audit dashboard"
+      title="LABORATORY QUALITY THINKING MODEL (LQTM)"
       subtitle="A decision-ready view of conformance, open findings, ownership, and CAPA progress."
       actions={
         <Link className="button primary" href="/audit">
