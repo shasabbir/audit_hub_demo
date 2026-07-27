@@ -82,7 +82,7 @@ const script = `(()=>{const defaults=${JSON.stringify(
   })),
 )};const key="lqtm-audit-answers";let saved={};try{saved=JSON.parse(localStorage.getItem(key)||"{}")}catch{}const answers=Object.fromEntries(defaults.map(q=>[q.id,saved[q.id]||q.answer]));const base=location.hostname.endsWith("github.io")?"/"+location.pathname.split("/").filter(Boolean)[0]:"";const findingUrl=id=>base+"/capa/"+id+"/";function save(){localStorage.setItem(key,JSON.stringify(answers))}function paint(card,answer){card.classList.remove("yes","no","na");card.classList.add(answer);card.querySelectorAll("[data-a]").forEach(button=>button.classList.toggle("active",button.dataset.a===answer));const slot=card.querySelector("[data-finding-slot]");if(slot)slot.innerHTML=answer==="no"?'<a class="open" href="'+findingUrl(card.dataset.qid)+'">Open finding →</a>':""}function updateSummary(){const values=Object.values(answers),answered=values.filter(Boolean).length,yes=values.filter(v=>v==="yes").length,no=values.filter(v=>v==="no").length,applicable=yes+no;const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};set("answered-count",answered+"/"+defaults.length);set("conformance-count",(applicable?Math.round(yes/applicable*100):0)+"%");set("progress-count",Math.round(answered/defaults.length*100)+"%");set("dashboard-conformance",(applicable?Math.round(yes/applicable*100):0)+"%");set("dashboard-open",no)}document.querySelectorAll("[data-qid]").forEach(card=>paint(card,answers[card.dataset.qid]||""));document.addEventListener("click",event=>{const answerButton=event.target.closest("[data-a]");if(answerButton){const card=answerButton.closest("[data-qid]");answers[card.dataset.qid]=answerButton.dataset.a;paint(card,answerButton.dataset.a);save();updateSummary()}const cause=event.target.closest(".cause");if(cause){document.querySelectorAll(".cause").forEach(item=>item.classList.remove("active"));cause.classList.add("active");const detail=document.querySelector(".detail");detail.className="detail "+cause.dataset.tone;detail.innerHTML="<b>"+cause.dataset.name+"</b><p>"+cause.dataset.ev+"</p>"}});const tbody=document.getElementById("findings-body");if(tbody){const rows=defaults.filter(q=>answers[q.id]==="no").map(q=>'<tr><td><a class="redlink" href="'+findingUrl(q.id)+'">Question '+q.id+' · Clause '+q.clause+'</a><small style="display:block;color:#6d7b75;margin-top:4px">'+q.question+'</small></td><td><span class="pill">High</span></td><td>Quality Manager</td><td>Dec 2026</td><td>Open</td></tr>').join("");tbody.innerHTML=rows||'<tr><td colspan="5" style="text-align:center;color:#6d7b75">No open findings</td></tr>'}updateSummary()})();`;
 function shell(path, title, subtitle, body) {
-  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${title}</title><style>${style}</style></head><body><div class="shell"><aside class="side"><a href="/" class="brand"><i>◈</i>LQTM Audit Hub</a><nav class="nav"><small>Workspace</small><a class="${path === "/" ? "on" : ""}" href="/">▣ &nbsp; Audit</a><a class="${path === "/dashboard" ? "on" : ""}" href="/dashboard">◫ &nbsp; Analysis</a><a class="${path.startsWith("/capa") ? "on" : ""}" href="/capa/2">⚠ &nbsp; CAPA</a></nav><div class="foot">● Internal audit<br><small>Draft · Jul 2026</small></div></aside><main class="main"><header class="head"><div><span class="kicker">ISO 9001:2015</span><h1>${title}</h1><p>${subtitle}</p></div></header>${body}</main></div><script>${script}</script></body></html>`;
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${title}</title><style>${style}</style></head><body><div class="shell"><aside class="side"><a href="/" class="brand"><i>◈</i>LQTM Audit Hub</a><nav class="nav"><small>Workspace</small><a class="${path === "/" || path === "/dashboard" ? "on" : ""}" href="/">◫ &nbsp; Dashboard</a><a class="${path === "/audit" ? "on" : ""}" href="/audit">▣ &nbsp; Audit</a><a class="${path.startsWith("/capa") ? "on" : ""}" href="/capa/2">⚠ &nbsp; CAPA</a></nav><div class="foot">● Internal audit<br><small>Draft · Jul 2026</small></div></aside><main class="main"><header class="head"><div><span class="kicker">ISO 9001:2015</span><h1>${title}</h1><p>${subtitle}</p></div></header>${body}</main></div><script>${script}</script></body></html>`;
 }
 function audit() {
   let qs = questions
@@ -92,7 +92,7 @@ function audit() {
     )
     .join("");
   return shell(
-    "/",
+    "/audit",
     "Laboratory quality audit",
     "Assess each requirement and open a CAPA when a response is nonconforming.",
     `<section class="summary"><div><span>Questions</span><strong>9</strong></div><div><span>Answered</span><strong>9/9</strong></div><div><span>Conforming</span><strong>56%</strong></div><div><span>Audit progress</span><strong>100%</strong></div></section><div class="toolbar"><input class="search" placeholder="Search question or clause"><div class="filters"><button class="on">All</button><button>YES</button><button>NO</button><button>N/A</button></div></div><div class="qlist">${qs}</div>`,
@@ -106,7 +106,7 @@ function dashboard() {
     )
     .join("");
   return shell(
-    "/dashboard",
+    "/",
     "Audit dashboard",
     "A decision-ready view of conformance, findings, ownership, and CAPA progress.",
     `<section class="metrics"><div class="metric"><span>Conformance rate</span><strong>63%</strong><small>5 of 8 applicable controls</small></div><div class="metric"><span>Open findings</span><strong>3</strong></div><div class="metric"><span>CAPA completion</span><strong>26%</strong></div><div class="metric"><span>Evidence coverage</span><strong>67%</strong></div></section><section class="grid"><article class="panel"><span class="kicker">Clause health</span><h2>Performance by section</h2><div class="bars"><div><label>4.1 Context <b>33%</b></label><div class="bar"><i class="red" style="width:33%"></i></div></div><div><label>4.2 Interested parties <b>50%</b></label><div class="bar"><i class="amber" style="width:50%"></i></div></div><div><label>4.3 Scope <b>100%</b></label><div class="bar"><i style="width:100%"></i></div></div></div></article><article class="panel"><span class="kicker">Overall analysis</span><h2>Context governance is the key gap</h2><p class="muted">Issues are identified, but strategic alignment, review triggers, ownership, and effectiveness evidence remain incomplete.</p></article></section><section class="panel"><h2>Nonconformities & CAPA</h2><table><thead><tr><th>Finding</th><th>Priority</th><th>Owner</th><th>Due</th><th>Progress</th></tr></thead><tbody>${rows}</tbody></table></section>`,
@@ -164,7 +164,7 @@ function auditV2() {
     )
     .join("");
   return shell(
-    "/",
+    "/audit",
     "Laboratory quality audit",
     "Assess each requirement and open a CAPA when a response is nonconforming.",
     `<style>.answers{align-items:center}.finding-slot{margin-left:auto}.answers button.active{transform:translateY(-1px);box-shadow:0 5px 12px rgb(17 47 81/10%)}</style><section class="summary"><div><span>Questions</span><strong>${questions.length}</strong></div><div><span>Answered</span><strong id="answered-count">0/${questions.length}</strong></div><div><span>Conforming</span><strong id="conformance-count">0%</strong></div><div><span>Audit progress</span><strong id="progress-count">0%</strong></div></section><div class="toolbar"><input class="search" id="question-search" placeholder="Search question or clause"><div class="filters"><button class="on">All</button><button>YES</button><button>NO</button><button>N/A</button></div></div><div class="qlist">${cards}</div>`,
@@ -173,7 +173,7 @@ function auditV2() {
 
 function dashboardV2() {
   return shell(
-    "/dashboard",
+    "/",
     "Audit dashboard",
     "A decision-ready view of conformance, findings, ownership, and CAPA progress.",
     `<section class="metrics"><div class="metric"><span>Conformance rate</span><strong id="dashboard-conformance">0%</strong><small>Based on saved applicable responses</small></div><div class="metric"><span>Open findings</span><strong id="dashboard-open">0</strong><small>Updated from the audit page</small></div><div class="metric"><span>CAPA completion</span><strong>26%</strong></div><div class="metric"><span>Evidence coverage</span><strong>67%</strong></div></section><section class="grid"><article class="panel"><span class="kicker">Clause health</span><h2>Performance by section</h2><div class="bars"><div><label>4.1 Context <b>33%</b></label><div class="bar"><i class="red" style="width:33%"></i></div></div><div><label>4.2 Interested parties <b>50%</b></label><div class="bar"><i class="amber" style="width:50%"></i></div></div><div><label>4.3 Scope <b>100%</b></label><div class="bar"><i style="width:100%"></i></div></div></div></article><article class="panel"><span class="kicker">Overall analysis</span><h2>Live audit status</h2><p class="muted">Response totals and open findings are loaded from the answers saved on this device.</p></article></section><section class="panel"><h2>Nonconformities & CAPA</h2><table><thead><tr><th>Finding</th><th>Priority</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead><tbody id="findings-body"></tbody></table></section>`,
@@ -216,7 +216,7 @@ function dashboardV3() {
     .join("");
   const chartStyles = `.time-chart-grid{display:grid;grid-template-columns:1.35fr .85fr;gap:14px;margin:14px 0}.chart-card{position:relative;overflow:hidden}.chart-title{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.chart-title h2{margin-bottom:3px}.dummy-pill{display:inline-flex;padding:5px 8px;border:1px solid #d9e2ef;border-radius:999px;background:#f5f8fb;color:#65758a;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.07em}.column-chart{height:250px;display:flex;align-items:flex-end;gap:10px;margin-top:25px;padding:18px 8px 28px;border-bottom:1px solid #cfd8d3;background:repeating-linear-gradient(to top,transparent 0,transparent 49px,#e8eeeb 50px)}.chart-column{position:relative;display:flex;flex:1;height:100%;min-width:24px;align-items:center;justify-content:flex-end;flex-direction:column}.chart-column i{display:block;width:min(32px,72%);min-height:3px;border-radius:7px 7px 2px 2px;background:#1b76d1;box-shadow:inset 0 1px rgb(255 255 255/25%);transform-origin:bottom;animation:bar-rise .75s var(--delay,0s) cubic-bezier(.2,.8,.2,1) both;transition:filter .2s,transform .2s}.chart-column:nth-child(2n) i{background:#155fac}.chart-column:hover i{filter:brightness(1.12);transform:scaleX(1.08)}.chart-column small{position:absolute;bottom:-23px;color:#708078;font-size:9px;font-weight:700}.bar-value{margin-bottom:5px;color:#31443c;font-size:9px;font-weight:800}.yearly-column i{width:min(48px,58%);background:#79b8a1}.yearly-column i.current{background:#0b7251}.chart-note{margin:12px 4px 0;color:#74827c;font-size:10px}.chart-note strong{color:#34473f}@keyframes bar-rise{from{scale:1 0;opacity:.35}to{scale:1 1;opacity:1}}@media(max-width:950px){.time-chart-grid{grid-template-columns:1fr}}@media(max-width:600px){.column-chart{gap:5px;overflow-x:auto}.chart-column{min-width:28px}.bar-value{font-size:8px}}`;
   return shell(
-    "/dashboard",
+    "/",
     "Audit dashboard",
     "A decision-ready view of conformance, findings, ownership, and CAPA progress.",
     `<style>${chartStyles}</style><section class="metrics"><div class="metric"><span>Conformance rate</span><strong id="dashboard-conformance">0%</strong><small>Based on saved applicable responses</small></div><div class="metric"><span>Open findings</span><strong id="dashboard-open">0</strong><small>Updated from the audit page</small></div><div class="metric"><span>CAPA completion</span><strong>26%</strong></div><div class="metric"><span>Evidence coverage</span><strong>67%</strong></div></section><section class="time-chart-grid"><article class="panel chart-card"><div class="chart-title"><div><span class="kicker">Monthly activity</span><h2>Audits completed by month</h2><span class="muted">Number of completed audits · Jan–Dec 2026</span></div><span class="dummy-pill">Dummy data</span></div><div class="column-chart">${monthlyBars}</div><p class="chart-note"><strong>Prototype insight:</strong> audit volume increases through the second half of the year.</p></article><article class="panel chart-card"><div class="chart-title"><div><span class="kicker">Yearly performance</span><h2>Annual conformance rate</h2><span class="muted">Applicable controls rated conforming · 2022–2026</span></div><span class="dummy-pill">Dummy data</span></div><div class="column-chart">${yearlyBars}</div><p class="chart-note"><strong>Prototype insight:</strong> conformance improves from 61% to 83% over five years.</p></article></section><section class="grid"><article class="panel"><span class="kicker">Clause health</span><h2>Performance by section</h2><div class="bars"><div><label>4.1 Context <b>33%</b></label><div class="bar"><i class="red" style="width:33%"></i></div></div><div><label>4.2 Interested parties <b>50%</b></label><div class="bar"><i class="amber" style="width:50%"></i></div></div><div><label>4.3 Scope <b>100%</b></label><div class="bar"><i style="width:100%"></i></div></div></div></article><article class="panel"><span class="kicker">Overall analysis</span><h2>Live audit status</h2><p class="muted">Response totals and open findings are loaded from the answers saved on this device.</p></article></section><section class="panel"><h2>Nonconformities & CAPA</h2><table><thead><tr><th>Finding</th><th>Priority</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead><tbody id="findings-body"></tbody></table></section>`,
@@ -339,11 +339,13 @@ export default {
   async fetch(req) {
     let p = new URL(req.url).pathname;
     let html =
-      p === "/dashboard"
+      p === "/" || p === "/dashboard"
         ? dashboardV3()
-        : p.startsWith("/capa/")
-          ? capaV2(p.split("/")[2])
-          : auditV2();
+        : p === "/audit"
+          ? auditV2()
+          : p.startsWith("/capa/")
+            ? capaV2(p.split("/")[2])
+            : dashboardV3();
     if (p.startsWith("/capa/")) {
       html = html.replace(
         /<article class="card smart">[\s\S]*?<\/article>/,

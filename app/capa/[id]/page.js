@@ -52,7 +52,7 @@ export default async function CapaPage({ params }) {
       subtitle={`Clause ${q.clause} · ${q.section}`}
       actions={
         <>
-          <Link href="/dashboard" className="button ghost">
+          <Link href="/" className="button ghost">
             <ArrowLeft size={17} />
             Dashboard
           </Link>

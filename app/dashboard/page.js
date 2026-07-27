@@ -43,7 +43,7 @@ export default function Dashboard() {
       title="Audit dashboard"
       subtitle="A decision-ready view of conformance, open findings, ownership, and CAPA progress."
       actions={
-        <Link className="button primary" href="/">
+        <Link className="button primary" href="/audit">
           Continue audit <ArrowUpRight size={17} />
         </Link>
       }

@@ -8,6 +8,7 @@ const basePath = (process.env.PAGES_BASE || "/audit_hub_demo").replace(
 );
 const routes = [
   "/",
+  "/audit",
   "/dashboard",
   ...Array.from({ length: 9 }, (_, index) => `/capa/${index + 1}`),
 ];

@@ -12,8 +12,8 @@ import {
 export function Shell({ children, eyebrow, title, subtitle, actions }) {
   const path = usePathname();
   const nav = [
-    { href: "/", label: "Audit", icon: ClipboardCheck },
-    { href: "/dashboard", label: "Analysis", icon: LayoutDashboard },
+    { href: "/", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/audit", label: "Audit", icon: ClipboardCheck },
     { href: "/capa/2", label: "CAPA", icon: FileWarning },
   ];
   return (
@@ -33,7 +33,7 @@ export function Shell({ children, eyebrow, title, subtitle, actions }) {
           {nav.map(({ href, label, icon: Icon }) => {
             const active =
               href === "/"
-                ? path === "/"
+                ? path === "/" || path === "/dashboard"
                 : path.startsWith(href.split("/").slice(0, 2).join("/"));
             return (
               <Link
