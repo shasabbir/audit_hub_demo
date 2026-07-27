@@ -19,7 +19,7 @@ export default function Dashboard() {
     const loadAnswers = () => {
       try {
         const saved = JSON.parse(
-          localStorage.getItem("lqtm-audit-answers") || "{}",
+          localStorage.getItem("lqtm-audit-answers-v2") || "{}",
         );
         setAuditQuestions((items) =>
           items.map((question) => ({
@@ -40,6 +40,12 @@ export default function Dashboard() {
   const na = auditQuestions.filter((q) => q.answer === "na").length;
   const applicable = yes + no;
   const rate = applicable ? Math.round((yes / applicable) * 100) : 0;
+  const evidenceCount = auditQuestions.filter(
+    (question) => question.evidence,
+  ).length;
+  const evidenceRate = Math.round(
+    (evidenceCount / auditQuestions.length) * 100,
+  );
   const findings = auditQuestions
     .filter((question) => question.answer === "no")
     .map((question) => [
@@ -126,8 +132,10 @@ export default function Dashboard() {
         </div>
         <div className="metric-card">
           <span>Evidence coverage</span>
-          <strong>67%</strong>
-          <small>6 of 9 questions supported</small>
+          <strong>{evidenceRate}%</strong>
+          <small>
+            {evidenceCount} of {auditQuestions.length} questions supported
+          </small>
           <CheckCircle2 size={24} />
         </div>
       </section>

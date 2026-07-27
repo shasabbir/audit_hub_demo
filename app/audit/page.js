@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -20,7 +20,7 @@ export default function AuditPage() {
   useEffect(() => {
     try {
       const saved = JSON.parse(
-        localStorage.getItem("lqtm-audit-answers") || "{}",
+        localStorage.getItem("lqtm-audit-answers-v2") || "{}",
       );
       setQuestions((items) =>
         items.map((question) => ({
@@ -58,7 +58,7 @@ export default function AuditPage() {
     setQuestions((items) => {
       const updated = items.map((q) => (q.id === id ? { ...q, answer } : q));
       localStorage.setItem(
-        "lqtm-audit-answers",
+        "lqtm-audit-answers-v2",
         JSON.stringify(
           Object.fromEntries(updated.map((q) => [q.id, q.answer])),
         ),
@@ -130,7 +130,7 @@ export default function AuditPage() {
         </div>
       </section>
       <div className="clause-list">
-        {clauseGroups.map(([clause, items]) => {
+        {clauseGroups.map(([clause, items], groupIndex) => {
           const allClauseQuestions = questions.filter(
             (question) => question.clause === clause,
           );
@@ -147,72 +147,87 @@ export default function AuditPage() {
           const rate = clauseApplicable
             ? Math.round((yes / clauseApplicable) * 100)
             : 0;
+          const majorClause = clause.split(".")[0];
+          const previousMajorClause =
+            groupIndex > 0 ? clauseGroups[groupIndex - 1][0].split(".")[0] : "";
           return (
-            <section className="clause-group" key={clause}>
-              <header className="clause-summary">
-                <div>
-                  <span className="eyebrow">Clause {clause}</span>
-                  <h2>{items[0].section}</h2>
-                  <p>
-                    {yes} Yes · {no} No · {na} N/A · {clauseApplicable}{" "}
-                    applicable
-                  </p>
-                </div>
-                <div className="clause-score">
-                  <strong>{rate}%</strong>
-                  <span>Conformance</span>
-                  <div className="clause-progress">
-                    <i style={{ width: `${rate}%` }} />
+            <Fragment key={clause}>
+              {majorClause !== previousMajorClause && (
+                <header className="major-clause">
+                  <span>Clause {majorClause}.0</span>
+                  <h2>
+                    {majorClause === "4"
+                      ? "Context of the organization"
+                      : "Leadership"}
+                  </h2>
+                </header>
+              )}
+              <section className="clause-group">
+                <header className="clause-summary">
+                  <div>
+                    <span className="eyebrow">Clause {clause}</span>
+                    <h2>{items[0].section}</h2>
+                    <p>
+                      {yes} Yes · {no} No · {na} N/A · {clauseApplicable}{" "}
+                      applicable
+                    </p>
                   </div>
-                </div>
-              </header>
-              <div className="question-list">
-                {items.map((q) => (
-                  <article className={`question-card ${q.answer}`} key={q.id}>
-                    <div className="question-number">
-                      {String(
-                        questions.findIndex(
-                          (question) => question.id === q.id,
-                        ) + 1,
-                      ).padStart(2, "0")}
+                  <div className="clause-score">
+                    <strong>{rate}%</strong>
+                    <span>Conformance</span>
+                    <div className="clause-progress">
+                      <i style={{ width: `${rate}%` }} />
                     </div>
-                    <div className="question-body">
-                      <div className="question-meta">
-                        <span>Clause {q.clause}</span>
-                        <span>{q.section}</span>
+                  </div>
+                </header>
+                <div className="question-list">
+                  {items.map((q) => (
+                    <article className={`question-card ${q.answer}`} key={q.id}>
+                      <div className="question-number">
+                        {String(
+                          questions.findIndex(
+                            (question) => question.id === q.id,
+                          ) + 1,
+                        ).padStart(2, "0")}
                       </div>
-                      <h2>{q.question}</h2>
-                      <div className="answer-row">
-                        <div className="answer-options">
-                          {["yes", "no", "na"].map((answer) => (
-                            <button
-                              key={answer}
-                              onClick={() => update(q.id, answer)}
-                              className={q.answer === answer ? "active" : ""}
-                            >
-                              {answer === "yes" && <Check size={16} />}{" "}
-                              {answer === "no" && <CircleAlert size={16} />}{" "}
-                              {answer.toUpperCase()}
-                            </button>
-                          ))}
+                      <div className="question-body">
+                        <div className="question-meta">
+                          <span>Clause {q.clause}</span>
+                          <span>{q.section}</span>
                         </div>
-                        {q.answer === "no" && (
-                          <Link className="capa-link" href={`/capa/${q.id}`}>
-                            Open finding <ArrowRight size={15} />
-                          </Link>
-                        )}
+                        <h2>{q.question}</h2>
+                        <div className="answer-row">
+                          <div className="answer-options">
+                            {["yes", "no", "na"].map((answer) => (
+                              <button
+                                key={answer}
+                                onClick={() => update(q.id, answer)}
+                                className={q.answer === answer ? "active" : ""}
+                              >
+                                {answer === "yes" && <Check size={16} />}{" "}
+                                {answer === "no" && <CircleAlert size={16} />}{" "}
+                                {answer.toUpperCase()}
+                              </button>
+                            ))}
+                          </div>
+                          {q.answer === "no" && (
+                            <Link className="capa-link" href={`/capa/${q.id}`}>
+                              Open finding <ArrowRight size={15} />
+                            </Link>
+                          )}
+                        </div>
+                        <button className="evidence">
+                          <span>
+                            {q.evidence || "Add evidence or auditor note"}
+                          </span>
+                          <ChevronDown size={16} />
+                        </button>
                       </div>
-                      <button className="evidence">
-                        <span>
-                          {q.evidence || "Add evidence or auditor note"}
-                        </span>
-                        <ChevronDown size={16} />
-                      </button>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </section>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            </Fragment>
           );
         })}
       </div>

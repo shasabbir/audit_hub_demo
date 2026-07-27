@@ -10,7 +10,7 @@ const routes = [
   "/",
   "/audit",
   "/dashboard",
-  ...Array.from({ length: 9 }, (_, index) => `/capa/${index + 1}`),
+  ...Array.from({ length: 41 }, (_, index) => `/capa/${index + 1}`),
 ];
 
 await rm(outputDir, { recursive: true, force: true });

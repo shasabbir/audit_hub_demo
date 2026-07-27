@@ -1,4 +1,4 @@
-export const questions = [
+const legacyQuestions = [
   {
     id: 1,
     clause: "4.1",
@@ -71,15 +71,9 @@ export const questions = [
     answer: "yes",
     evidence: "Training matrix and signed policy",
   },
-  {
-    id: 9,
-    clause: "6.1",
-    section: "Risks and opportunities",
-    question: "Is the effectiveness of actions taken regularly evaluated?",
-    answer: "na",
-    evidence: "New process; first review due Q4",
-  },
 ];
+
+export { questions } from "./questions";
 
 export const capas = {
   2: {

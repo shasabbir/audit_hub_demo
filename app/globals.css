@@ -279,6 +279,21 @@ h2 {
   display: grid;
   gap: 24px;
 }
+.major-clause {
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: var(--navy);
+  color: #fff;
+}
+.major-clause span {
+  color: #a9c9bd;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.major-clause h2 {
+  margin: 5px 0 0;
+}
 .clause-group {
   display: grid;
   gap: 12px;

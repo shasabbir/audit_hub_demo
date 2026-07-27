@@ -15,7 +15,7 @@ const findings = {
     "The register has no review owner, frequency, or change-notification trigger.",
   ],
 };
-const questions = [
+const legacyQuestions = [
   [
     1,
     "4.1",
@@ -64,11 +64,248 @@ const questions = [
     "Is the quality policy documented, communicated, and understood?",
     "yes",
   ],
+];
+const questions = [
+  [
+    1,
+    "4.1",
+    "Has the organization identified relevant internal and external issues affecting the QMS?",
+    "yes",
+  ],
+  [
+    2,
+    "4.1",
+    "Are the identified internal and external issues relevant to the organization’s purpose and strategic direction?",
+    "no",
+  ],
+  [
+    3,
+    "4.1",
+    "Are the identified internal and external issues periodically monitored and reviewed?",
+    "no",
+  ],
+  [
+    4,
+    "4.2",
+    "Has the organization identified the relevant interested parties and their applicable requirements related to the QMS?",
+    "no",
+  ],
+  [
+    5,
+    "4.2",
+    "Are the interested parties and their relevant requirements regularly monitored and reviewed?",
+    "no",
+  ],
+  [
+    6,
+    "4.3",
+    "Has the organization clearly defined the boundaries and applicability of the QMS?",
+    "no",
+  ],
+  [
+    7,
+    "4.3",
+    "Does the QMS scope consider relevant internal and external issues?",
+    "no",
+  ],
+  [
+    8,
+    "4.3",
+    "Does the QMS scope consider the requirements of relevant interested parties?",
+    "yes",
+  ],
   [
     9,
-    "6.1",
-    "Is the effectiveness of actions taken regularly evaluated?",
-    "na",
+    "4.3",
+    "Does the QMS scope clearly identify the products and services covered?",
+    "no",
+  ],
+  [
+    10,
+    "4.3",
+    "Is the QMS scope maintained as documented information and readily available?",
+    "no",
+  ],
+  [
+    11,
+    "4.3",
+    "Are any exclusions/non-applicable ISO 9001 requirements identified and justified?",
+    "no",
+  ],
+  [
+    12,
+    "4.4",
+    "Has the organization identified and implemented the required QMS processes?",
+    "no",
+  ],
+  [
+    13,
+    "4.4",
+    "Has the organization defined the inputs and outputs of each process?",
+    "no",
+  ],
+  [
+    14,
+    "4.4",
+    "Has the organization defined the order of its processes and how they interact?",
+    "no",
+  ],
+  [
+    15,
+    "4.4",
+    "Does the organization monitor and measure process performance?",
+    "no",
+  ],
+  [
+    16,
+    "4.4",
+    "Has the organization provided adequate resources and assigned responsibilities?",
+    "no",
+  ],
+  [
+    17,
+    "4.4",
+    "Has the organization identified and addressed risks and opportunities?",
+    "no",
+  ],
+  [
+    18,
+    "4.4",
+    "Does the organization review and improve processes and maintain required documents and records?",
+    "no",
+  ],
+  [
+    19,
+    "5.1",
+    "Does top management take responsibility for the effectiveness of the QMS?",
+    "no",
+  ],
+  [
+    20,
+    "5.1",
+    "Are the quality policy and quality objectives aligned with the organization’s direction?",
+    "no",
+  ],
+  [
+    21,
+    "5.1",
+    "Are QMS requirements included in the organization’s regular activities?",
+    "no",
+  ],
+  [
+    22,
+    "5.1",
+    "Does top management promote process-based and risk-based thinking?",
+    "no",
+  ],
+  [
+    23,
+    "5.1",
+    "Does top management ensure adequate resources for the QMS?",
+    "no",
+  ],
+  [
+    24,
+    "5.1",
+    "Does top management communicate the importance of quality and QMS requirements?",
+    "no",
+  ],
+  [
+    25,
+    "5.1",
+    "Does top management ensure that the QMS achieves its intended results?",
+    "no",
+  ],
+  [
+    26,
+    "5.1",
+    "Does top management support and involve employees in achieving QMS requirements?",
+    "no",
+  ],
+  [
+    27,
+    "5.1",
+    "Does top management promote continual improvement and support responsible managers?",
+    "no",
+  ],
+  [
+    28,
+    "5.1.2",
+    "Are customer requirements clearly identified and understood?",
+    "no",
+  ],
+  [
+    29,
+    "5.1.2",
+    "Are applicable statutory and regulatory requirements identified and met?",
+    "no",
+  ],
+  [
+    30,
+    "5.1.2",
+    "Are risks and opportunities affecting products and services identified and addressed?",
+    "no",
+  ],
+  [31, "5.1.2", "Are actions taken to improve customer satisfaction?", "no"],
+  [
+    32,
+    "5.1.2",
+    "Is customer satisfaction regularly monitored and reviewed?",
+    "no",
+  ],
+  [
+    33,
+    "5.2.1 / 5.2.2",
+    "Is the quality policy appropriate to the organization’s purpose and direction?",
+    "yes",
+  ],
+  [
+    34,
+    "5.2.1 / 5.2.2",
+    "Does the quality policy support the setting of quality objectives?",
+    "yes",
+  ],
+  [
+    35,
+    "5.2.1 / 5.2.2",
+    "Does the quality policy include commitments to meet applicable requirements and continual improvement?",
+    "yes",
+  ],
+  [
+    36,
+    "5.2.1 / 5.2.2",
+    "Is the quality policy documented, communicated, and understood by employees?",
+    "yes",
+  ],
+  [
+    37,
+    "5.2.1 / 5.2.2",
+    "Is the quality policy available to relevant interested parties, where appropriate?",
+    "yes",
+  ],
+  [
+    38,
+    "5.3",
+    "Are QMS roles, responsibilities, and authorities clearly assigned, communicated, and understood?",
+    "no",
+  ],
+  [
+    39,
+    "5.3",
+    "Is responsibility assigned to ensure QMS compliance and effective process performance?",
+    "no",
+  ],
+  [
+    40,
+    "5.3",
+    "Is responsibility assigned to report QMS performance, identify improvement opportunities, and promote customer focus?",
+    "no",
+  ],
+  [
+    41,
+    "5.3",
+    "Is responsibility assigned to maintain QMS integrity when changes are planned and implemented?",
+    "no",
   ],
 ];
 const style = `*{box-sizing:border-box}body{margin:0;background:#f5f7f4;color:#13231d;font:14px Arial}a{text-decoration:none;color:inherit}.shell{display:grid;grid-template-columns:230px 1fr;min-height:100vh}.side{position:fixed;inset:0 auto 0 0;width:230px;height:100vh;background:#102b24;color:#fff;padding:26px 18px;display:flex;flex-direction:column}.brand{font-size:19px;font-weight:800;margin:0 8px 35px}.brand i{display:inline-grid;place-items:center;width:38px;height:38px;background:#d9f46b;color:#17382f;border-radius:12px;margin-right:10px}.nav small{display:block;color:#789289;text-transform:uppercase;letter-spacing:.14em;margin:20px 12px 8px}.nav a{display:block;padding:13px 14px;color:#bcd0c9;border-radius:10px;margin:4px 0;font-weight:700}.nav a.on,.nav a:hover{background:#21443a;color:#fff}.foot{margin-top:auto;background:#173a30;border:1px solid #2d5147;border-radius:13px;padding:14px;color:#a9bdb6}.main{grid-column:2;padding:38px 4vw 70px;max-width:1450px;width:100%}.head{display:flex;justify-content:space-between;align-items:end;margin-bottom:26px}.kicker{font-size:10px;color:#0b7251;text-transform:uppercase;letter-spacing:.14em;font-weight:800}h1{font-size:34px;margin:5px 0 7px}h2{margin:4px 0 10px;font-size:18px}.muted,.head p,.card p{color:#6d7b75;line-height:1.6}.summary,.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.summary,.metric,.panel,.card,.sidecard{background:#fff;border:1px solid #e2e8e4;border-radius:15px;padding:20px}.summary span,.metric span{display:block;color:#6d7b75;font-size:11px}.summary strong,.metric strong{font-size:25px;display:block;margin-top:6px}.toolbar{display:flex;justify-content:space-between;margin:20px 0}.search{padding:11px 15px;border:1px solid #dfe6e2;border-radius:10px;background:#fff;min-width:300px}.filters button,.answers button{border:1px solid #dfe6e2;padding:8px 12px;background:#fff;font-weight:800}.filters .on{background:#0b7251;color:#fff}.qlist{display:grid;gap:11px}.q{background:#fff;border:1px solid #e2e8e4;border-radius:14px;padding:20px;display:grid;grid-template-columns:45px 1fr}.q.no{border-color:#eaa9a4;box-shadow:inset 4px 0 #c53a35}.num{color:#93a19b;font-weight:800}.meta{font-size:10px;color:#0b7251;text-transform:uppercase;font-weight:800}.q h2{font-size:15px;margin:7px 0 15px}.answers{display:flex;gap:7px}.answers button{border-radius:8px;font-size:11px}.q.yes .yes,.q.na .na{background:#e7f4ee;color:#0b7251}.q.no .no{background:#fff0ee;color:#c53a35}.open{margin-left:auto;background:#fff0ee;color:#c53a35;padding:8px 12px;border-radius:8px;font-size:11px;font-weight:800}.metric:first-child{background:#102b24;color:#fff}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}.bars>div{margin:18px 0}.bars label{display:flex;justify-content:space-between}.bar{height:8px;background:#edf0ee;border-radius:9px;margin-top:7px}.bar i{display:block;height:100%;background:#0b7251}.bar .red{background:#c53a35}.bar .amber{background:#bb7517}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:14px;border-top:1px solid #e2e8e4}th{font-size:10px;color:#75827c;text-transform:uppercase}.redlink{color:#c53a35;font-weight:800}.pill{padding:5px 9px;border-radius:20px;background:#fff0ee;color:#c53a35;font-size:10px;font-weight:800}.hero{background:#102b24;color:#fff;border-radius:16px;padding:23px;margin-bottom:14px}.hero blockquote{margin:15px 0 0;display:flex;justify-content:space-between}.hero b{color:#ff9790}.cgrid{display:grid;grid-template-columns:1.8fr .7fr;gap:14px}.stack{display:grid;gap:12px}.danger{border-left:4px solid #c53a35}.smart{background:#e9f5ef;border-color:#bedccd}.sidecard{margin-bottom:12px}.progress{height:9px;background:#e7ece9;border-radius:8px}.progress i{display:block;height:100%;background:#0b7251;border-radius:8px}.fish{overflow:hidden;border-color:#efcbc7}.fishhead{display:flex;justify-content:space-between}.fishstage{height:315px;position:relative}.spine{position:absolute;left:5%;right:16%;top:50%;height:3px;background:#c53a35;animation:draw .8s}.spine:after{content:"";position:absolute;right:-10px;top:-5px;border-left:12px solid #c53a35;border-top:6px solid transparent;border-bottom:6px solid transparent}.effect{position:absolute;right:0;top:50%;transform:translateY(-50%);background:#c53a35;color:#fff;width:125px;height:82px;border-radius:50% 15px 15px 50%;display:grid;place-content:center;text-align:center;animation:pop .6s}.cause{position:absolute;top:50%;width:120px;height:130px;border:0;background:none;cursor:pointer;opacity:0;animation:fade .4s var(--d) forwards}.cause.top{transform:translate(-50%,-100%)}.cause.bottom{transform:translate(-50%,0)}.cause:before{content:"";position:absolute;left:50%;width:2px;height:75px;background:#df8d88}.cause.top:before{bottom:0;transform:rotate(-34deg)}.cause.bottom:before{top:0;transform:rotate(34deg)}.cause b,.cause small{display:block;position:absolute;text-align:left;color:#c53a35}.cause small{color:#65736d;font-size:9px}.cause.top b{top:15px}.cause.top small{top:35px}.cause.bottom b{bottom:43px}.cause.bottom small{bottom:5px}.cause.active b{background:#c53a35;color:#fff;padding:4px;border-radius:5px}.detail{background:#fff0ee;border:1px solid #efc0bb;border-radius:10px;padding:13px;animation:fade .3s}.detail b{color:#c53a35}@keyframes draw{from{transform:scaleX(0)}}@keyframes pop{from{opacity:0;transform:translate(20px,-50%) scale(.8)}}@keyframes fade{to{opacity:1}}@media(max-width:800px){.shell{display:block}.side{position:static;width:auto;height:auto}.foot{display:none}.nav a{display:inline-block}.main{padding:24px 15px}.summary,.metrics,.grid,.cgrid{grid-template-columns:1fr}.fishstage{height:auto;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:15px 0}.spine,.effect{display:none}.cause,.cause.top,.cause.bottom{position:static;transform:none;width:auto;height:80px;border:1px solid #efcbc7;background:#fff7f6;border-radius:9px;padding:10px;text-align:left}.cause:before{display:none}.cause b,.cause small,.cause.top b,.cause.top small,.cause.bottom b,.cause.bottom small{position:static}.toolbar{display:block}.search{width:100%;margin-bottom:10px}}`;
@@ -82,7 +319,7 @@ const script = `(()=>{const defaults=${JSON.stringify(
   })),
 )};const key="lqtm-audit-answers";let saved={};try{saved=JSON.parse(localStorage.getItem(key)||"{}")}catch{}const answers=Object.fromEntries(defaults.map(q=>[q.id,saved[q.id]||q.answer]));const base=location.hostname.endsWith("github.io")?"/"+location.pathname.split("/").filter(Boolean)[0]:"";const findingUrl=id=>base+"/capa/"+id+"/";function save(){localStorage.setItem(key,JSON.stringify(answers))}function paint(card,answer){card.classList.remove("yes","no","na");card.classList.add(answer);card.querySelectorAll("[data-a]").forEach(button=>button.classList.toggle("active",button.dataset.a===answer));const slot=card.querySelector("[data-finding-slot]");if(slot)slot.innerHTML=answer==="no"?'<a class="open" href="'+findingUrl(card.dataset.qid)+'">Open finding →</a>':""}function updateSummary(){const values=Object.values(answers),answered=values.filter(Boolean).length,yes=values.filter(v=>v==="yes").length,no=values.filter(v=>v==="no").length,applicable=yes+no;const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};set("answered-count",answered+"/"+defaults.length);set("conformance-count",(applicable?Math.round(yes/applicable*100):0)+"%");set("progress-count",Math.round(answered/defaults.length*100)+"%");set("dashboard-conformance",(applicable?Math.round(yes/applicable*100):0)+"%");set("dashboard-open",no)}document.querySelectorAll("[data-qid]").forEach(card=>paint(card,answers[card.dataset.qid]||""));document.addEventListener("click",event=>{const answerButton=event.target.closest("[data-a]");if(answerButton){const card=answerButton.closest("[data-qid]");answers[card.dataset.qid]=answerButton.dataset.a;paint(card,answerButton.dataset.a);save();updateSummary()}const cause=event.target.closest(".cause");if(cause){document.querySelectorAll(".cause").forEach(item=>item.classList.remove("active"));cause.classList.add("active");const detail=document.querySelector(".detail");detail.className="detail "+cause.dataset.tone;detail.innerHTML="<b>"+cause.dataset.name+"</b><p>"+cause.dataset.ev+"</p>"}});const tbody=document.getElementById("findings-body");if(tbody){const rows=defaults.filter(q=>answers[q.id]==="no").map(q=>'<tr><td><a class="redlink" href="'+findingUrl(q.id)+'">Question '+q.id+' · Clause '+q.clause+'</a><small style="display:block;color:#6d7b75;margin-top:4px">'+q.question+'</small></td><td><span class="pill">High</span></td><td>Quality Manager</td><td>Dec 2026</td><td>Open</td></tr>').join("");tbody.innerHTML=rows||'<tr><td colspan="5" style="text-align:center;color:#6d7b75">No open findings</td></tr>'}updateSummary()})();`;
 function clientStateController(defaults) {
-  const storageKey = "lqtm-audit-answers";
+  const storageKey = "lqtm-audit-answers-v2";
   const validAnswers = new Set(["yes", "no", "na"]);
   const savedAnswers = readSavedAnswers();
   const answers = Object.fromEntries(
@@ -187,6 +424,29 @@ function clientStateController(defaults) {
     const result = score(defaults.map((question) => answers[question.id]));
     setText("dashboard-conformance", `${result.rate}%`);
     setText("dashboard-open", result.no);
+    document
+      .querySelectorAll("[data-dashboard-clause]")
+      .forEach((clauseRow) => {
+        const clause = clauseRow.dataset.dashboardClause;
+        const clauseQuestions = defaults.filter(
+          (question) => question.clause === clause,
+        );
+        const clauseResult = score(
+          clauseQuestions.map((question) => answers[question.id]),
+        );
+        const rate = clauseRow.querySelector("[data-dashboard-clause-rate]");
+        const bar = clauseRow.querySelector("[data-dashboard-clause-bar]");
+        if (rate) rate.textContent = `${clauseResult.rate}%`;
+        if (bar) {
+          bar.style.width = `${Math.max(clauseResult.rate, 3)}%`;
+          bar.className =
+            clauseResult.rate >= 80
+              ? ""
+              : clauseResult.rate >= 50
+                ? "amber"
+                : "red";
+        }
+      });
     const tableBody = document.getElementById("findings-body");
     if (!tableBody) return;
     const rows = defaults
@@ -387,15 +647,17 @@ function auditV2() {
 
 function auditV3() {
   const clauseTitles = {
-    4.1: "Organizational context",
-    4.2: "Interested parties",
-    4.3: "Scope of the QMS",
+    4.1: "Understanding the organization and its context",
+    4.2: "Understanding the Needs and Expectations of Interested Parties",
+    4.3: "Determining the Scope of the QMS",
+    4.4: "QMS and Its Processes",
     5.1: "Leadership and commitment",
-    5.2: "Quality policy",
-    6.1: "Risks and opportunities",
+    "5.1.2": "Customer Focus",
+    "5.2.1 / 5.2.2": "Establishing and Communicating the Quality Policy",
+    5.3: "Organizational Roles, Responsibilities and Authorities",
   };
   const clauseGroups = [...new Set(questions.map((question) => question[1]))]
-    .map((clause) => {
+    .map((clause, index, clauses) => {
       const clauseQuestions = questions.filter(
         (question) => question[1] === clause,
       );
@@ -416,7 +678,14 @@ function auditV3() {
             `<article class="q ${answer}" data-qid="${id}"><div class="num">${String(id).padStart(2, "0")}</div><div><span class="meta">Clause ${questionClause}</span><h2>${question}</h2><div class="answers"><button class="yes" data-a="yes">&#10003; YES</button><button class="no" data-a="no">&#9888; NO</button><button class="na" data-a="na">N/A</button><span class="finding-slot" data-finding-slot></span></div></div></article>`,
         )
         .join("");
-      return `<section class="clause-group" data-clause-group="${clause}"><header class="clause-summary"><div><span class="kicker">Clause ${clause}</span><h2>${clauseTitles[clause] || "Quality requirement"}</h2><p data-clause-detail>${yes} Yes · ${no} No · ${na} N/A · ${applicable} applicable</p></div><div class="clause-score"><strong data-clause-rate>${rate}%</strong><span>Conformance</span><div class="clause-progress"><i data-clause-bar style="width:${rate}%"></i></div></div></header><div class="qlist">${cards}</div></section>`;
+      const majorClause = clause.split(".")[0];
+      const previousMajorClause =
+        index > 0 ? clauses[index - 1].split(".")[0] : "";
+      const majorHeading =
+        majorClause !== previousMajorClause
+          ? `<div class="major-clause" style="padding:18px 20px;border-radius:14px;background:#102b24;color:#fff"><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#a9c9bd">Clause ${majorClause}.0</span><h2 style="margin:5px 0 0">${majorClause === "4" ? "Context of the organization" : "Leadership"}</h2></div>`
+          : "";
+      return `${majorHeading}<section class="clause-group" data-clause-group="${clause}"><header class="clause-summary"><div><span class="kicker">Clause ${clause}</span><h2>${clauseTitles[clause] || "Quality requirement"}</h2><p data-clause-detail>${yes} Yes · ${no} No · ${na} N/A · ${applicable} applicable</p></div><div class="clause-score"><strong data-clause-rate>${rate}%</strong><span>Conformance</span><div class="clause-progress"><i data-clause-bar style="width:${rate}%"></i></div></div></header><div class="qlist">${cards}</div></section>`;
     })
     .join("");
   const clauseUpdater = "";
@@ -480,9 +749,41 @@ function dashboardV3() {
   );
 }
 
+function dashboardV4() {
+  const clauseTitles = {
+    4.1: "Organization context",
+    4.2: "Interested parties",
+    4.3: "QMS scope",
+    4.4: "QMS processes",
+    5.1: "Leadership",
+    "5.1.2": "Customer focus",
+    "5.2.1 / 5.2.2": "Quality policy",
+    5.3: "Roles and authorities",
+  };
+  const clauseBars = [...new Set(questions.map((question) => question[1]))]
+    .map(
+      (clause) =>
+        `<div data-dashboard-clause="${clause}"><label>Clause ${clause} · ${clauseTitles[clause]} <b data-dashboard-clause-rate>0%</b></label><div class="bar"><i class="red" data-dashboard-clause-bar style="width:3%"></i></div></div>`,
+    )
+    .join("");
+  return dashboardV3()
+    .replace(
+      /<div class="bars">[\s\S]*?<\/div><\/article><article class="panel"><span class="kicker">Overall analysis<\/span>/,
+      `<div class="bars">${clauseBars}</div></article><article class="panel"><span class="kicker">Overall analysis</span>`,
+    )
+    .replace(
+      '<div class="metric"><span>Evidence coverage</span><strong>67%</strong>',
+      '<div class="metric"><span>Evidence coverage</span><strong>0%</strong>',
+    );
+}
+
 function capaV2(id) {
   const q = questions.find((item) => item[0] === Number(id)) || questions[1];
-  const finding = findings[id] || findings[2];
+  const finding = findings[id] || [
+    `Corrective action for question ${q[0]}`,
+    `The audit response to “${q[2]}” is No and requires documented investigation.`,
+    "The applicable QMS process does not define sufficient controls, ownership, monitoring, or retained evidence.",
+  ];
   const causes = [
     {
       label: "Method",
@@ -597,7 +898,7 @@ export default {
     let p = new URL(req.url).pathname;
     let html =
       p === "/" || p === "/dashboard"
-        ? dashboardV3()
+        ? dashboardV4()
         : p === "/audit"
           ? auditV3()
           : p.startsWith("/capa/")
