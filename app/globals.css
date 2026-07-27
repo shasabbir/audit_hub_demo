@@ -715,6 +715,7 @@ td:first-child small {
 }
 .smart-table {
   width: 100%;
+  min-width: 1120px;
   border-collapse: collapse;
 }
 .smart-table th,
@@ -734,7 +735,7 @@ td:first-child small {
   text-transform: uppercase;
 }
 .smart-table tbody th {
-  width: 145px;
+  width: 64px;
   color: var(--green);
   font-size: 12px;
 }
@@ -745,6 +746,16 @@ td:first-child small {
 .smart-table tbody tr:last-child th,
 .smart-table tbody tr:last-child td {
   border-bottom: 0;
+}
+.smart-status {
+  display: inline-block;
+  padding: 6px 9px;
+  border-radius: 99px;
+  background: #fff1d9;
+  color: #945b08;
+  font-size: 10px;
+  font-weight: 800;
+  white-space: nowrap;
 }
 .capa-sidebar {
   display: grid;

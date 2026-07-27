@@ -19,22 +19,32 @@ export default async function CapaPage({ params }) {
     title: "Create corrective action plan",
     finding: `The audit response to “${q.question}” is No and requires documented investigation.`,
   };
-  const smartRows = [
-    { criterion: "Specific", detail: c.correctiveAction },
-    { criterion: "Measurable", detail: c.objective },
-    {
-      criterion: "Achievable",
-      detail: `${c.owner} owns the action, with progress monitored by ${c.monitor}.`,
+  const smartObjectives = {
+    2: {
+      objective: "Strategic Alignment of Internal and External Issues",
+      target: "100% of documented issues",
+      timeline: "Dec 2026",
+      status: "Planned",
     },
-    {
-      criterion: "Relevant",
-      detail: `Directly addresses the identified nonconformity: ${c.finding}`,
+    3: {
+      objective: "Periodic Review of Internal and External Issues",
+      target: "1 Review System",
+      timeline: "Dec 2026",
+      status: "Planned",
     },
-    {
-      criterion: "Time-bound",
-      detail: `Complete the objective and retain approval evidence by ${c.due}.`,
+    5: {
+      objective: "Review of Interested-Party Requirements",
+      target: "100% of applicable requirements",
+      timeline: "Nov 2026",
+      status: "In progress",
     },
-  ];
+  };
+  const smart = smartObjectives[q.id] || {
+    objective: c.title,
+    target: "1 Corrective Action Plan",
+    timeline: c.due,
+    status: "Planned",
+  };
   return (
     <Shell
       eyebrow={`Finding NC-${String(q.id).padStart(3, "0")}`}
@@ -112,22 +122,34 @@ export default async function CapaPage({ params }) {
           </article>
           <article className="smart-card">
             <span className="eyebrow">SMART objective</span>
-            <h2>Objective breakdown</h2>
+            <h2>Action and accountability plan</h2>
             <div className="smart-table-wrap">
               <table className="smart-table">
                 <thead>
                   <tr>
-                    <th>SMART criterion</th>
-                    <th>Objective detail</th>
+                    <th>S/N</th>
+                    <th>Objectives</th>
+                    <th>Target</th>
+                    <th>Timeline</th>
+                    <th>Action Plan</th>
+                    <th>Person Responsible</th>
+                    <th>Person Monitoring</th>
+                    <th>Achievement / Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {smartRows.map((row) => (
-                    <tr key={row.criterion}>
-                      <th scope="row">{row.criterion}</th>
-                      <td>{row.detail}</td>
-                    </tr>
-                  ))}
+                  <tr>
+                    <th scope="row">{String(q.id).padStart(2, "0")}</th>
+                    <td>{smart.objective}</td>
+                    <td>{smart.target}</td>
+                    <td>{smart.timeline}</td>
+                    <td>{c.correctiveAction}</td>
+                    <td>{c.owner}</td>
+                    <td>{c.monitor}</td>
+                    <td>
+                      <span className="smart-status">{smart.status}</span>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>

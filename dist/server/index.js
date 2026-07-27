@@ -298,38 +298,41 @@ function capaV2(id) {
 
 function smartObjectiveTable(id) {
   const q = questions.find((item) => item[0] === +id) || questions[1];
-  const finding = findings[id] || findings[2];
   const owner = +id === 5 ? "Compliance Lead" : "Quality Manager";
   const monitor = +id === 5 ? "Quality Manager" : "Director";
-  const due = +id === 5 ? "30 November 2026" : "15 December 2026";
-  const rows = [
-    [
-      "Specific",
-      "Revise the QMS procedure to define criteria, ownership, review triggers, approval evidence, and retained records.",
+  const correctiveAction =
+    +id === 3
+      ? "Establish review schedule, assign responsibility, and periodically update identified issues"
+      : +id === 5
+        ? "Assign process owners and integrate the register into the quarterly compliance review"
+        : "Revise the context-review procedure, define approval criteria, and retain review evidence";
+  const objectives = {
+    2: [
+      "Strategic Alignment of Internal and External Issues",
+      "100% of documented issues",
+      "Dec 2026",
+      "Planned",
     ],
-    [
-      "Measurable",
-      "Review 100% of applicable records and retain documented approval evidence.",
+    3: [
+      "Periodic Review of Internal and External Issues",
+      "1 Review System",
+      "Dec 2026",
+      "Planned",
     ],
-    [
-      "Achievable",
-      `${owner} owns the action, with progress monitored by ${monitor}.`,
+    5: [
+      "Review of Interested-Party Requirements",
+      "100% of applicable requirements",
+      "Nov 2026",
+      "In progress",
     ],
-    [
-      "Relevant",
-      `Directly addresses NC-${String(q[0]).padStart(3, "0")}: ${finding[1]}`,
-    ],
-    [
-      "Time-bound",
-      `Complete the objective and retain approval evidence by ${due}.`,
-    ],
-  ]
-    .map(
-      ([criterion, detail]) =>
-        `<tr><th scope="row">${criterion}</th><td>${detail}</td></tr>`,
-    )
-    .join("");
-  return `<style>.smart h2{margin-bottom:14px}.smart-table-wrap{overflow-x:auto;border:1px solid #bfdbce;border-radius:12px;background:#fff}.smart-table th,.smart-table td{padding:13px 15px;border-top:0;border-bottom:1px solid #dcebe4;vertical-align:top;line-height:1.5}.smart-table thead th{background:#f3faf6;color:#0b7251}.smart-table tbody th{width:145px;color:#0b7251;font-size:11px}.smart-table tbody td{font-size:13px}.smart-table tbody tr:last-child th,.smart-table tbody tr:last-child td{border-bottom:0}</style><article class="card smart"><span class="kicker">SMART objective</span><h2>Objective breakdown</h2><div class="smart-table-wrap"><table class="smart-table"><thead><tr><th>SMART criterion</th><th>Objective detail</th></tr></thead><tbody>${rows}</tbody></table></div></article>`;
+  };
+  const objective = objectives[id] || [
+    "Corrective Action for Audit Finding",
+    "1 Corrective Action Plan",
+    "Dec 2026",
+    "Planned",
+  ];
+  return `<style>.smart h2{margin-bottom:14px}.smart-table-wrap{overflow-x:auto;border:1px solid #bfdbce;border-radius:12px;background:#fff}.smart-table{min-width:1120px}.smart-table th,.smart-table td{padding:13px 15px;border-top:0;border-bottom:1px solid #dcebe4;vertical-align:top;line-height:1.5}.smart-table thead th{background:#f3faf6;color:#0b7251}.smart-table tbody th{width:64px;color:#0b7251;font-size:11px}.smart-table tbody td{font-size:13px}.smart-table tbody tr:last-child th,.smart-table tbody tr:last-child td{border-bottom:0}.smart-status{display:inline-block;padding:6px 9px;border-radius:99px;background:#fff1d9;color:#945b08;font-size:10px;font-weight:800;white-space:nowrap}</style><article class="card smart"><span class="kicker">SMART objective</span><h2>Action and accountability plan</h2><div class="smart-table-wrap"><table class="smart-table"><thead><tr><th>S/N</th><th>Objectives</th><th>Target</th><th>Timeline</th><th>Action Plan</th><th>Person Responsible</th><th>Person Monitoring</th><th>Achievement / Status</th></tr></thead><tbody><tr><th scope="row">${String(q[0]).padStart(2, "0")}</th><td>${objective[0]}</td><td>${objective[1]}</td><td>${objective[2]}</td><td>${correctiveAction}</td><td>${owner}</td><td>${monitor}</td><td><span class="smart-status">${objective[3]}</span></td></tr></tbody></table></div></article>`;
 }
 
 export default {
