@@ -85,9 +85,32 @@
     if (bar) bar.style.width = `${result.rate}%`;
   }
 
+  function renderMajorClause(group) {
+    const majorClause = group.dataset.majorClause;
+    const clauseRates = [...document.querySelectorAll("[data-clause-group]")]
+      .filter((clauseGroup) =>
+        clauseGroup.dataset.clauseGroup.startsWith(`${majorClause}.`),
+      )
+      .map((clauseGroup) => {
+        const cards = [...clauseGroup.querySelectorAll("[data-qid]")];
+        return score(cards.map((card) => answers[card.dataset.qid])).rate;
+      });
+    const average = clauseRates.length
+      ? Math.round(
+          clauseRates.reduce((total, rate) => total + rate, 0) /
+            clauseRates.length,
+        )
+      : 0;
+    const rate = group.querySelector("[data-major-rate]");
+    const bar = group.querySelector("[data-major-bar]");
+    if (rate) rate.textContent = `${average}%`;
+    if (bar) bar.style.width = `${average}%`;
+  }
+
   function renderAudit() {
     document.querySelectorAll("[data-qid]").forEach(renderQuestion);
     document.querySelectorAll("[data-clause-group]").forEach(renderClause);
+    document.querySelectorAll("[data-major-clause]").forEach(renderMajorClause);
     const values = defaults.map((question) => answers[question.id]);
     const result = score(values);
     const answered = values.filter((value) => validAnswers.has(value)).length;
@@ -155,6 +178,16 @@
         if (visible) visibleCards += 1;
       });
       group.hidden = visibleCards === 0;
+    });
+    document.querySelectorAll("[data-major-clause]").forEach((group) => {
+      const majorClause = group.dataset.majorClause;
+      group.hidden = ![
+        ...document.querySelectorAll("[data-clause-group]"),
+      ].some(
+        (clauseGroup) =>
+          clauseGroup.dataset.clauseGroup.startsWith(`${majorClause}.`) &&
+          !clauseGroup.hidden,
+      );
     });
     document.querySelectorAll(".filters button").forEach((button) => {
       const value = button.textContent.trim().toLowerCase().replace("/", "");

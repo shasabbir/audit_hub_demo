@@ -150,16 +150,53 @@ export default function AuditPage() {
           const majorClause = clause.split(".")[0];
           const previousMajorClause =
             groupIndex > 0 ? clauseGroups[groupIndex - 1][0].split(".")[0] : "";
+          const majorClauseRates = [
+            ...new Set(
+              questions
+                .filter((question) =>
+                  question.clause.startsWith(`${majorClause}.`),
+                )
+                .map((question) => question.clause),
+            ),
+          ].map((childClause) => {
+            const childQuestions = questions.filter(
+              (question) => question.clause === childClause,
+            );
+            const childYes = childQuestions.filter(
+              (question) => question.answer === "yes",
+            ).length;
+            const childNo = childQuestions.filter(
+              (question) => question.answer === "no",
+            ).length;
+            return childYes + childNo
+              ? Math.round((childYes / (childYes + childNo)) * 100)
+              : 0;
+          });
+          const majorAverage = Math.round(
+            majorClauseRates.reduce(
+              (total, childRate) => total + childRate,
+              0,
+            ) / majorClauseRates.length,
+          );
           return (
             <Fragment key={clause}>
               {majorClause !== previousMajorClause && (
                 <header className="major-clause">
-                  <span>Clause {majorClause}.0</span>
-                  <h2>
-                    {majorClause === "4"
-                      ? "Context of the organization"
-                      : "Leadership"}
-                  </h2>
+                  <div>
+                    <span>Clause {majorClause}.0</span>
+                    <h2>
+                      {majorClause === "4"
+                        ? "Context of the organization"
+                        : "Leadership"}
+                    </h2>
+                  </div>
+                  <div className="major-clause-score">
+                    <strong>{majorAverage}%</strong>
+                    <span>Average conformance</span>
+                    <div>
+                      <i style={{ width: `${majorAverage}%` }} />
+                    </div>
+                  </div>
                 </header>
               )}
               <section className="clause-group">

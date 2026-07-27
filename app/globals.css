@@ -280,6 +280,10 @@ h2 {
   gap: 24px;
 }
 .major-clause {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
   padding: 18px 20px;
   border-radius: 14px;
   background: var(--navy);
@@ -293,6 +297,33 @@ h2 {
 }
 .major-clause h2 {
   margin: 5px 0 0;
+}
+.major-clause-score {
+  min-width: 210px;
+  text-align: right;
+}
+.major-clause-score strong {
+  display: block;
+  color: #d9f46b;
+  font: 800 25px Manrope;
+}
+.major-clause-score > span {
+  display: block;
+  letter-spacing: 0.08em;
+}
+.major-clause-score > div {
+  height: 7px;
+  margin-top: 8px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #315047;
+}
+.major-clause-score i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #d9f46b;
+  transition: width 0.35s ease;
 }
 .clause-group {
   display: grid;
@@ -353,6 +384,9 @@ h2 {
   }
   .clause-score {
     min-width: 110px;
+  }
+  .major-clause-score {
+    min-width: 120px;
   }
 }
 .question-list {

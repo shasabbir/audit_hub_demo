@@ -405,9 +405,32 @@ function clientStateController(defaults) {
     if (bar) bar.style.width = `${result.rate}%`;
   }
 
+  function renderMajorClause(group) {
+    const majorClause = group.dataset.majorClause;
+    const clauseRates = [...document.querySelectorAll("[data-clause-group]")]
+      .filter((clauseGroup) =>
+        clauseGroup.dataset.clauseGroup.startsWith(`${majorClause}.`),
+      )
+      .map((clauseGroup) => {
+        const cards = [...clauseGroup.querySelectorAll("[data-qid]")];
+        return score(cards.map((card) => answers[card.dataset.qid])).rate;
+      });
+    const average = clauseRates.length
+      ? Math.round(
+          clauseRates.reduce((total, rate) => total + rate, 0) /
+            clauseRates.length,
+        )
+      : 0;
+    const rate = group.querySelector("[data-major-rate]");
+    const bar = group.querySelector("[data-major-bar]");
+    if (rate) rate.textContent = `${average}%`;
+    if (bar) bar.style.width = `${average}%`;
+  }
+
   function renderAudit() {
     document.querySelectorAll("[data-qid]").forEach(renderQuestion);
     document.querySelectorAll("[data-clause-group]").forEach(renderClause);
+    document.querySelectorAll("[data-major-clause]").forEach(renderMajorClause);
     const values = defaults.map((question) => answers[question.id]);
     const result = score(values);
     const answered = values.filter((value) => validAnswers.has(value)).length;
@@ -475,6 +498,16 @@ function clientStateController(defaults) {
         if (visible) visibleCards += 1;
       });
       group.hidden = visibleCards === 0;
+    });
+    document.querySelectorAll("[data-major-clause]").forEach((group) => {
+      const majorClause = group.dataset.majorClause;
+      group.hidden = ![
+        ...document.querySelectorAll("[data-clause-group]"),
+      ].some(
+        (clauseGroup) =>
+          clauseGroup.dataset.clauseGroup.startsWith(`${majorClause}.`) &&
+          !clauseGroup.hidden,
+      );
     });
     document.querySelectorAll(".filters button").forEach((button) => {
       const value = button.textContent.trim().toLowerCase().replace("/", "");
@@ -681,9 +714,29 @@ function auditV3() {
       const majorClause = clause.split(".")[0];
       const previousMajorClause =
         index > 0 ? clauses[index - 1].split(".")[0] : "";
+      const majorRates = clauses
+        .filter((item) => item.startsWith(`${majorClause}.`))
+        .map((item) => {
+          const childQuestions = questions.filter(
+            (question) => question[1] === item,
+          );
+          const childYes = childQuestions.filter(
+            (question) => question[3] === "yes",
+          ).length;
+          const childNo = childQuestions.filter(
+            (question) => question[3] === "no",
+          ).length;
+          return childYes + childNo
+            ? Math.round((childYes / (childYes + childNo)) * 100)
+            : 0;
+        });
+      const majorAverage = Math.round(
+        majorRates.reduce((total, childRate) => total + childRate, 0) /
+          majorRates.length,
+      );
       const majorHeading =
         majorClause !== previousMajorClause
-          ? `<div class="major-clause" style="padding:18px 20px;border-radius:14px;background:#102b24;color:#fff"><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#a9c9bd">Clause ${majorClause}.0</span><h2 style="margin:5px 0 0">${majorClause === "4" ? "Context of the organization" : "Leadership"}</h2></div>`
+          ? `<div class="major-clause" data-major-clause="${majorClause}" style="display:flex;justify-content:space-between;align-items:center;gap:24px;padding:18px 20px;border-radius:14px;background:#102b24;color:#fff"><div><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#a9c9bd">Clause ${majorClause}.0</span><h2 style="margin:5px 0 0">${majorClause === "4" ? "Context of the organization" : "Leadership"}</h2></div><div style="min-width:210px;text-align:right"><strong data-major-rate style="display:block;font-size:25px;color:#d9f46b">${majorAverage}%</strong><span style="display:block;font-size:10px;color:#a9c9bd;text-transform:uppercase;letter-spacing:.08em">Average conformance</span><div style="height:7px;margin-top:8px;overflow:hidden;border-radius:99px;background:#315047"><i data-major-bar style="display:block;width:${majorAverage}%;height:100%;border-radius:inherit;background:#d9f46b;transition:width .35s ease"></i></div></div></div>`
           : "";
       return `${majorHeading}<section class="clause-group" data-clause-group="${clause}"><header class="clause-summary"><div><span class="kicker">Clause ${clause}</span><h2>${clauseTitles[clause] || "Quality requirement"}</h2><p data-clause-detail>${yes} Yes · ${no} No · ${na} N/A · ${applicable} applicable</p></div><div class="clause-score"><strong data-clause-rate>${rate}%</strong><span>Conformance</span><div class="clause-progress"><i data-clause-bar style="width:${rate}%"></i></div></div></header><div class="qlist">${cards}</div></section>`;
     })
