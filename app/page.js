@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -17,6 +17,21 @@ export default function AuditPage() {
   const [questions, setQuestions] = useState(seed);
   const [filter, setFilter] = useState("all");
   const [query, setQuery] = useState("");
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(
+        localStorage.getItem("lqtm-audit-answers") || "{}",
+      );
+      setQuestions((items) =>
+        items.map((question) => ({
+          ...question,
+          answer: saved[question.id] || question.answer,
+        })),
+      );
+    } catch {
+      // Keep the bundled dummy answers if local storage is unavailable.
+    }
+  }, []);
   const visible = useMemo(
     () =>
       questions.filter(
@@ -30,9 +45,16 @@ export default function AuditPage() {
   const answered = questions.filter((q) => q.answer !== "").length;
   const compliant = questions.filter((q) => q.answer === "yes").length;
   const update = (id, answer) =>
-    setQuestions((items) =>
-      items.map((q) => (q.id === id ? { ...q, answer } : q)),
-    );
+    setQuestions((items) => {
+      const updated = items.map((q) => (q.id === id ? { ...q, answer } : q));
+      localStorage.setItem(
+        "lqtm-audit-answers",
+        JSON.stringify(
+          Object.fromEntries(updated.map((q) => [q.id, q.answer])),
+        ),
+      );
+      return updated;
+    });
 
   return (
     <Shell

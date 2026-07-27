@@ -6,14 +6,16 @@ const basePath = (process.env.PAGES_BASE || "/audit_hub_demo").replace(
   /\/$/,
   "",
 );
-const routes = ["/", "/dashboard", "/capa/2", "/capa/3", "/capa/5"];
+const routes = [
+  "/",
+  "/dashboard",
+  ...Array.from({ length: 9 }, (_, index) => `/capa/${index + 1}`),
+];
 
 await rm(outputDir, { recursive: true, force: true });
 
 for (const route of routes) {
-  const response = await app.fetch(
-    new Request(`https://pages.local${route}`),
-  );
+  const response = await app.fetch(new Request(`https://pages.local${route}`));
   let html = await response.text();
 
   // GitHub project Pages sites are served below /<repository-name>/.
