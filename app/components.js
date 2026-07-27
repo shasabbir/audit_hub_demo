@@ -2,19 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  ClipboardCheck,
-  LayoutDashboard,
-  FileWarning,
-  FlaskConical,
-} from "lucide-react";
+import { ClipboardCheck, LayoutDashboard, FlaskConical } from "lucide-react";
 
 export function Shell({ children, eyebrow, title, subtitle, actions }) {
   const path = usePathname();
   const nav = [
     { href: "/", label: "Dashboard", icon: LayoutDashboard },
     { href: "/audit", label: "Audit", icon: ClipboardCheck },
-    { href: "/capa/2", label: "CAPA", icon: FileWarning },
   ];
   return (
     <div className="site-shell">
